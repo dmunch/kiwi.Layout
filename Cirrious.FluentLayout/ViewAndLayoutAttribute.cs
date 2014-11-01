@@ -5,10 +5,7 @@
 // 
 // Project Lead - Stuart Lodge, @slodge, me@slodge.com
 
-using MonoTouch.UIKit;
-using MonoTouch.Foundation;
-
-namespace Cirrious.FluentLayouts.Touch
+namespace Cirrious.FluentLayouts
 {
 	public enum LayoutAttribute
 	{
@@ -51,29 +48,4 @@ namespace Cirrious.FluentLayouts.Touch
 		public abstract IFluentLayout<T> GreaterThanOrEqualTo (float constant = 0f);
 		public abstract IFluentLayout<T> LessThanOrEqualTo(float constant = 0f);
 	}
-
-	public class UIViewAndLayoutAttribute : ViewAndLayoutAttribute<NSObject>
-    {
-        public UIViewAndLayoutAttribute(NSObject view, LayoutAttribute attribute)
-			:base(view, attribute)
-		{
-			nsAttribute = (NSLayoutAttribute)((int)attribute);
-        }
-		NSLayoutAttribute nsAttribute;
-
-		public override IFluentLayout<NSObject> EqualTo(float constant = 0f)
-        {
-            return new FluentLayout(View, nsAttribute, NSLayoutRelation.Equal, constant);
-        }
-
-		public override IFluentLayout<NSObject> GreaterThanOrEqualTo(float constant = 0f)
-        {
-			return new FluentLayout(View, nsAttribute, NSLayoutRelation.GreaterThanOrEqual, constant);
-        }
-
-		public override IFluentLayout<NSObject> LessThanOrEqualTo(float constant = 0f)
-        {
-            return new FluentLayout(View, nsAttribute, NSLayoutRelation.LessThanOrEqual, constant);
-        }
-    }
 }

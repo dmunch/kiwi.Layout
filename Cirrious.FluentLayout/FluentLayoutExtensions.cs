@@ -7,41 +7,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using MonoTouch.UIKit;
 
-namespace Cirrious.FluentLayouts.Touch
+namespace Cirrious.FluentLayouts
 {
-	public static class FluentLayoutExtensionsNative
-	{
-		public static void SubviewsDoNotTranslateAutoresizingMaskIntoConstraints(this UIView view)
-		{
-			foreach (var subview in view.Subviews)
-			{
-				subview.TranslatesAutoresizingMaskIntoConstraints = false;
-			}
-		}
-
-		public static void AddConstraints(this UIView view, params FluentLayout[] fluentLayouts)
-		{
-			view.AddConstraints(fluentLayouts
-				.Where(fluent => fluent != null)
-				.SelectMany(fluent => fluent.ToLayoutConstraints())
-				.ToArray());
-		}
-
-		public static void AddConstraints(this UIView view, IEnumerable<FluentLayout> fluentLayouts)
-		{
-			view.AddConstraints(fluentLayouts
-				.Where(fluent => fluent != null)
-				.SelectMany(fluent => fluent.ToLayoutConstraints())
-				.ToArray());
-		}
-	}
-
-
     public static class FluentLayoutExtensions
     {
-    
         public static ViewAndLayoutAttribute<T> Left<T>(this T view)
         {
             return view.WithLayoutAttribute(LayoutAttribute.Left);

@@ -6,9 +6,8 @@
 // Project Lead - Stuart Lodge, @slodge, me@slodge.com
 
 using System.Collections.Generic;
-using MonoTouch.UIKit;
 
-namespace Cirrious.FluentLayouts.Touch
+namespace Cirrious.FluentLayouts
 {
     public static class AdvancedFluentLayoutExtensions
     {
