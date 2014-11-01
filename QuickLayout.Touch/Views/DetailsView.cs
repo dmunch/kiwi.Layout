@@ -61,7 +61,7 @@ namespace QuickLayout.Touch.Views
             }
             set.Apply();
 
-            var constraints = View.VerticalStackPanelConstraints(
+			var constraints = View.VerticalStackPanelConstraints(
                                                    new Margins(20, 10, 20, 10, 5, 5),
                                                    View.Subviews);
             View.AddConstraints(constraints);

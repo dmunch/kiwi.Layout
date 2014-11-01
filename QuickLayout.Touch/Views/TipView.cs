@@ -1,4 +1,5 @@
 using System.Drawing;
+using Cirrious.FluentLayouts;
 using Cirrious.FluentLayouts.Touch;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Touch.Views;
@@ -57,21 +58,21 @@ namespace QuickLayout.Touch.Views
                     subTotal.AtTopOf(View, margin),
                     subTotal.AtRightOf(View, margin),
 
-                    seek.WithSameLeft(subTotal),
-                    seek.Below(subTotal, margin),
-                    seek.ToLeftOf(seekLabel, margin),
-                    seek.WithRelativeWidth(seekLabel, 3),
+                    seek.WithSameLeft<NSObject>(subTotal),
+					seek.Below<NSObject>(subTotal, margin),
+					seek.ToLeftOf<NSObject>(seekLabel, margin),
+					seek.WithRelativeWidth<NSObject>(seekLabel, 3),
 
-                    seekLabel.WithSameRight(subTotal),
-                    seekLabel.WithSameTop(seek),
+					seekLabel.WithSameRight<NSObject>(subTotal),
+					seekLabel.WithSameTop<NSObject>(seek),
 
-                    tipLabel.Below(seek, margin),
-                    tipLabel.WithSameLeft(seek),
-                    tipLabel.WithSameWidth(totalLabel),
+					tipLabel.Below<NSObject>(seek, margin),
+					tipLabel.WithSameLeft<NSObject>(seek),
+					tipLabel.WithSameWidth<NSObject>(totalLabel),
 
                     totalLabel.WithSameTop(tipLabel),
                     totalLabel.ToRightOf(tipLabel, margin),
-                    totalLabel.WithSameRight(subTotal)
+					totalLabel.WithSameRight<NSObject>(subTotal)
                 );
         }
     }

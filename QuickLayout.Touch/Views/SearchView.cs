@@ -46,8 +46,8 @@ namespace QuickLayout.Touch.Views
                     button.Width().EqualTo(ButtonWidth),
 
                     text.AtLeftOf(View, hPadding),
-                    text.ToLeftOf(button, hPadding),
-                    text.WithSameTop(button)
+					text.ToLeftOf<NSObject>(button, hPadding),
+					text.WithSameTop<NSObject>(button)
 
                 );
         }

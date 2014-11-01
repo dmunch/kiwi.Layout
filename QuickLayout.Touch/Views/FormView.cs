@@ -77,7 +77,7 @@ namespace QuickLayout.Touch.Views
             var vMargin = 10;
 
 
-            View.AddConstraints(
+			View.AddConstraints(
 
                 fNameLabel.AtTopOf(View, vMargin),
                 fNameLabel.AtLeftOf(View, hMargin),
@@ -87,45 +87,45 @@ namespace QuickLayout.Touch.Views
                 sNameLabel.AtRightOf(View, hMargin),
                 sNameLabel.WithSameWidth(fNameLabel),
 
-                fNameField.WithSameWidth(fNameLabel),
-                fNameField.WithSameLeft(fNameLabel),
-                fNameField.Below(fNameLabel, vMargin),
+				fNameField.WithSameWidth<NSObject>(fNameLabel),
+				fNameField.WithSameLeft<NSObject>(fNameLabel),
+				fNameField.Below<NSObject>(fNameLabel, vMargin),
 
-                sNameField.WithSameLeft(sNameLabel),
-                sNameField.WithSameWidth(sNameLabel),
+				sNameField.WithSameLeft<NSObject>(sNameLabel),
+				sNameField.WithSameWidth<NSObject>(sNameLabel),
                 sNameField.WithSameTop(fNameField),
 
                 numberLabel.WithSameLeft(fNameLabel),
                 numberLabel.ToLeftOf(streetLabel, hMargin),
-                numberLabel.Below(fNameField, vMargin),
+				numberLabel.Below<NSObject>(fNameField, vMargin),
                 numberLabel.WithRelativeWidth(streetLabel, 0.3f),
 
                 streetLabel.WithSameTop(numberLabel),
                 streetLabel.AtRightOf(View, hMargin),
 
-                numberField.WithSameLeft(numberLabel),
-                numberField.WithSameWidth(numberLabel),
-                numberField.Below(numberLabel, vMargin),
+				numberField.WithSameLeft<NSObject>(numberLabel),
+				numberField.WithSameWidth<NSObject>(numberLabel),
+				numberField.Below<NSObject>(numberLabel, vMargin),
 
-                streetField.WithSameLeft(streetLabel),
-                streetField.WithSameWidth(streetLabel),
-                streetField.WithSameTop(numberField),
+				streetField.WithSameLeft<NSObject>(streetLabel),
+				streetField.WithSameWidth<NSObject>(streetLabel),
+				streetField.WithSameTop<NSObject>(numberField),
 
                 townLabel.WithSameLeft(fNameLabel),
                 townLabel.WithSameRight(streetLabel),
-                townLabel.Below(numberField, vMargin),
+				townLabel.Below<NSObject>(numberField, vMargin),
 
-                townField.WithSameLeft(townLabel),
-                townField.WithSameWidth(townLabel),
-                townField.Below(townLabel, vMargin),
+				townField.WithSameLeft<NSObject>(townLabel),
+				townField.WithSameWidth<NSObject>(townLabel),
+				townField.Below<NSObject>(townLabel, vMargin),
 
                 zipLabel.WithSameLeft(fNameLabel),
                 zipLabel.WithSameWidth(townLabel),
-                zipLabel.Below(townField, vMargin),
+				zipLabel.Below<NSObject>(townField, vMargin),
 
-                zipField.WithSameLeft(townLabel),
-                zipField.WithSameWidth(zipLabel),
-                zipField.Below(zipLabel, vMargin),
+				zipField.WithSameLeft<NSObject>(townLabel),
+				zipField.WithSameWidth<NSObject>(zipLabel),
+				zipField.Below<NSObject>(zipLabel, vMargin),
 
                 debug.WithSameLeft(townLabel),
                 debug.WithSameWidth(zipLabel),

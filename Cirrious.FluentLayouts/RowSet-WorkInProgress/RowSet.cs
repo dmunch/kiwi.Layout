@@ -11,7 +11,7 @@ namespace Cirrious.FluentLayouts.RowSet
         public float BottomMargin { get; set; }
         public float VInterspacing { get; set; }
 
-		public IEnumerable<IFluentLayout<T>> Generate<T>(T container, params Row<T>[] rows)
+		public IEnumerable<IFluentLayout<T>> Generate<T>(T container, params IRow<T>[] rows)
         {
             for (var i = 0; i < rows.Length; i++)
             {
@@ -42,28 +42,41 @@ namespace Cirrious.FluentLayouts.RowSet
         }
     }
 
-    public class Row<T>
+	public class Row
+	{
+		public static Row<T> Create<T>(IRowTemplate rowTemplate, params T[] views)
+		{
+			return new Row<T> (rowTemplate, views);
+		}
+	}
+	public interface IRow<out T>
+	{
+		IRowTemplate Template { get; }
+		IEnumerable<T> Views { get; }
+	}
+
+	public class Row<T> : IRow<T>
     {
         public Row()
         {
         }
 
-		public Row(IRowTemplate<T> rowTemplate, params T[] views)
+		public Row(IRowTemplate rowTemplate, params T[] views)
         {
             Template = rowTemplate;
             Views = views;
         }
-
-		public IRowTemplate<T> Template { get; set; }
+			
+		public IRowTemplate Template { get; set; }
         public IEnumerable<T> Views { get; set; }
     }
 
-    public interface IRowTemplate<T>
+    public interface IRowTemplate
     {
-		IEnumerable<IFluentLayout<T>> Generate(T container, params T[] views);
+		IEnumerable<IFluentLayout<T>> Generate<T>(T container, params T[] views);
     }
 
-    public class RowTemplate<T> : IRowTemplate<T>
+    public class RowTemplate : IRowTemplate
     {
         public float LeftMargin { get; set; }
         public float RightMargin { get; set; }
@@ -108,7 +121,7 @@ namespace Cirrious.FluentLayouts.RowSet
             _columnDefinitions[position] = new WeightedWidthColumn(weight);
         }
 
-		public IEnumerable<IFluentLayout<T>> Generate(T container, params T[] views)
+		public IEnumerable<IFluentLayout<T>> Generate<T>(T container, params T[] views)
         {
             WeightedWidthColumn firstWeightedColumn = null;
 			T firstWeightedView = default(T);

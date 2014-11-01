@@ -1,6 +1,7 @@
 using System.Drawing;
+using Cirrious.FluentLayouts;
+using Cirrious.FluentLayouts.RowSet;
 using Cirrious.FluentLayouts.Touch;
-using Cirrious.FluentLayouts.Touch.RowSet;
 using Cirrious.MvvmCross.Binding.BindingContext;
 using Cirrious.MvvmCross.Touch.Views;
 using MonoTouch.Foundation;
@@ -92,20 +93,20 @@ namespace QuickLayout.Touch.Views
                     BottomMargin = 20f,
                     VInterspacing = 10f
                 };
-            var equalWeightRowTemplate = new RowTemplate()
+			var equalWeightRowTemplate = new RowTemplate()
                 {
                     HInterspacing = 12f,
                     LeftMargin = 6f,
                     RightMargin = 24f
                 };
-            var addressRowTemplate = new RowTemplate()
+			var addressRowTemplate = new RowTemplate
                 {
                     HInterspacing = 12f,
                     LeftMargin = 6f,
                     RightMargin = 24f
                 };
             addressRowTemplate.ColumnWeight(0, 0.3f);
-            var townAndZipRowTemplate = new RowTemplate()
+			var townAndZipRowTemplate = new RowTemplate()
             {
                 HInterspacing = 12f,
                 LeftMargin = 6f,
@@ -113,16 +114,16 @@ namespace QuickLayout.Touch.Views
             };
             townAndZipRowTemplate.ColumnWidth(1, 120f);
 
-            View.AddConstraints(
+			View.AddConstraints(
                 rowSet.Generate(View,
-                    new Row(equalWeightRowTemplate, _forceTheWidthView),
-                    new Row(equalWeightRowTemplate, fNameLabel, sNameLabel),
-                    new Row(equalWeightRowTemplate, fNameField, sNameField),
-                    new Row(addressRowTemplate, numberLabel, streetLabel),
-                    new Row(addressRowTemplate, numberField, streetField),
-                    new Row(townAndZipRowTemplate, townLabel, zipLabel),
-                    new Row(townAndZipRowTemplate, townField, zipField),
-                    new Row(equalWeightRowTemplate, _debugLabel)
+					Row.Create(equalWeightRowTemplate, _forceTheWidthView),
+					Row.Create(equalWeightRowTemplate, fNameLabel, sNameLabel),
+					Row.Create(equalWeightRowTemplate, fNameField, sNameField),
+					Row.Create(addressRowTemplate, numberLabel, streetLabel),
+					Row.Create(addressRowTemplate, numberField, streetField),
+					Row.Create(townAndZipRowTemplate, townLabel, zipLabel),
+					Row.Create(townAndZipRowTemplate, townField, zipField),
+					Row.Create(equalWeightRowTemplate, _debugLabel)
                 ));
             View.AddConstraints(_forceTheWidthView.Width().EqualTo().WidthOf(View).Minus(30f));
         }
