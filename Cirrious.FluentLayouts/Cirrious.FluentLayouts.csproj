@@ -38,6 +38,7 @@
     <Compile Include="Margins.cs" />
     <Compile Include="ViewAndLayoutAttribute.cs" />
     <Compile Include="RowSet-WorkInProgress\RowSet.cs" />
+    <Compile Include="IViewAndLayoutAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
