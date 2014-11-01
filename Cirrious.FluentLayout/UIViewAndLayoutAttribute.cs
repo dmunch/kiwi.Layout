@@ -6,33 +6,74 @@
 // Project Lead - Stuart Lodge, @slodge, me@slodge.com
 
 using MonoTouch.UIKit;
+using MonoTouch.Foundation;
 
 namespace Cirrious.FluentLayouts.Touch
 {
-    public class UIViewAndLayoutAttribute
+	public enum LayoutAttribute
+	{
+		NoAttribute,
+		Left,
+		Right,
+		Top,
+		Bottom,
+		Leading,
+		Trailing,
+		Width,
+		Height,
+		CenterX,
+		CenterY,
+		Baseline,
+		LastBaseline = 11,
+		FirstBaseline,
+		LeftMargin,
+		RightMargin,
+		TopMargin,
+		BottomMargin,
+		LeadingMargin,
+		TrailingMargin,
+		CenterXWithinMargins,
+		CenterYWithinMargins
+	}
+		
+	public abstract class ViewAndLayoutAttribute<T>
+	{
+		public ViewAndLayoutAttribute(T view, LayoutAttribute attribute)
+		{
+			Attribute = attribute;
+			View = view;
+		}
+
+		public T View { get; private set; }
+		public LayoutAttribute Attribute { get; private set; }
+
+		public abstract IFluentLayout<T> EqualTo (float constant = 0f);
+		public abstract IFluentLayout<T> GreaterThanOrEqualTo (float constant = 0f);
+		public abstract IFluentLayout<T> LessThanOrEqualTo(float constant = 0f);
+	}
+
+	public class UIViewAndLayoutAttribute : ViewAndLayoutAttribute<NSObject>
     {
-        public UIViewAndLayoutAttribute(UIView view, NSLayoutAttribute attribute)
+        public UIViewAndLayoutAttribute(NSObject view, LayoutAttribute attribute)
+			:base(view, attribute)
+		{
+			nsAttribute = (NSLayoutAttribute)((int)attribute);
+        }
+		NSLayoutAttribute nsAttribute;
+
+		public override IFluentLayout<NSObject> EqualTo(float constant = 0f)
         {
-            Attribute = attribute;
-            View = view;
+            return new FluentLayout(View, nsAttribute, NSLayoutRelation.Equal, constant);
         }
 
-        public UIView View { get; private set; }
-        public NSLayoutAttribute Attribute { get; private set; }
-
-        public FluentLayout EqualTo(float constant = 0f)
+		public override IFluentLayout<NSObject> GreaterThanOrEqualTo(float constant = 0f)
         {
-            return new FluentLayout(View, Attribute, NSLayoutRelation.Equal, constant);
+			return new FluentLayout(View, nsAttribute, NSLayoutRelation.GreaterThanOrEqual, constant);
         }
 
-        public FluentLayout GreaterThanOrEqualTo(float constant = 0f)
+		public override IFluentLayout<NSObject> LessThanOrEqualTo(float constant = 0f)
         {
-            return new FluentLayout(View, Attribute, NSLayoutRelation.GreaterThanOrEqual, constant);
-        }
-
-        public FluentLayout LessThanOrEqualTo(float constant = 0f)
-        {
-            return new FluentLayout(View, Attribute, NSLayoutRelation.LessThanOrEqual, constant);
+            return new FluentLayout(View, nsAttribute, NSLayoutRelation.LessThanOrEqual, constant);
         }
     }
 }

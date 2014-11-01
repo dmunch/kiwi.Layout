@@ -12,18 +12,18 @@ namespace Cirrious.FluentLayouts.Touch.RowSet
         public float BottomMargin { get; set; }
         public float VInterspacing { get; set; }
 
-        public IEnumerable<FluentLayout> Generate(UIView container, params Row[] rows)
+		public IEnumerable<IFluentLayout<T>> Generate<T>(T container, params Row<T>[] rows)
         {
             for (var i = 0; i < rows.Length; i++)
             {
-                var verticalGenerators = new List<Func<UIView, FluentLayout>>();
+				var verticalGenerators = new List<Func<T, IFluentLayout<T>>>();
 
                 var isFirst = i == 0;
                 if (isFirst)
                     verticalGenerators.Add(view => view.AtTopOf(container, TopMargin));
                 else
                 {
-                    var previousRowView = rows[i - 1].Views.First();
+                    T previousRowView = rows[i - 1].Views.First();
                     verticalGenerators.Add(view => view.Below(previousRowView, VInterspacing));
                 }
 
@@ -43,28 +43,28 @@ namespace Cirrious.FluentLayouts.Touch.RowSet
         }
     }
 
-    public class Row
+    public class Row<T>
     {
         public Row()
         {
         }
 
-        public Row(IRowTemplate rowTemplate, params UIView[] views)
+		public Row(IRowTemplate<T> rowTemplate, params T[] views)
         {
             Template = rowTemplate;
             Views = views;
         }
 
-        public IRowTemplate Template { get; set; }
-        public IEnumerable<UIView> Views { get; set; }
+		public IRowTemplate<T> Template { get; set; }
+        public IEnumerable<T> Views { get; set; }
     }
 
-    public interface IRowTemplate
+    public interface IRowTemplate<T>
     {
-        IEnumerable<FluentLayout> Generate(UIView container, params UIView[] views);
+		IEnumerable<IFluentLayout<T>> Generate(T container, params T[] views);
     }
 
-    public class RowTemplate : IRowTemplate
+    public class RowTemplate<T> : IRowTemplate<T>
     {
         public float LeftMargin { get; set; }
         public float RightMargin { get; set; }
@@ -109,10 +109,10 @@ namespace Cirrious.FluentLayouts.Touch.RowSet
             _columnDefinitions[position] = new WeightedWidthColumn(weight);
         }
 
-        public IEnumerable<FluentLayout> Generate(UIView container, params UIView[] views)
+		public IEnumerable<IFluentLayout<T>> Generate(T container, params T[] views)
         {
             WeightedWidthColumn firstWeightedColumn = null;
-            UIView firstWeightedView = null;
+			T firstWeightedView = default(T);
 
             for (var i = 0; i < views.Length; i++)
             {

@@ -11,90 +11,97 @@ using MonoTouch.UIKit;
 
 namespace Cirrious.FluentLayouts.Touch
 {
+	public static class FluentLayoutExtensionsNative
+	{
+		public static void SubviewsDoNotTranslateAutoresizingMaskIntoConstraints(this UIView view)
+		{
+			foreach (var subview in view.Subviews)
+			{
+				subview.TranslatesAutoresizingMaskIntoConstraints = false;
+			}
+		}
+
+		public static void AddConstraints(this UIView view, params FluentLayout[] fluentLayouts)
+		{
+			view.AddConstraints(fluentLayouts
+				.Where(fluent => fluent != null)
+				.SelectMany(fluent => fluent.ToLayoutConstraints())
+				.ToArray());
+		}
+
+		public static void AddConstraints(this UIView view, IEnumerable<FluentLayout> fluentLayouts)
+		{
+			view.AddConstraints(fluentLayouts
+				.Where(fluent => fluent != null)
+				.SelectMany(fluent => fluent.ToLayoutConstraints())
+				.ToArray());
+		}
+	}
+
+
     public static class FluentLayoutExtensions
     {
-        public static void SubviewsDoNotTranslateAutoresizingMaskIntoConstraints(this UIView view)
+    
+        public static ViewAndLayoutAttribute<T> Left<T>(this T view)
         {
-            foreach (var subview in view.Subviews)
-            {
-                subview.TranslatesAutoresizingMaskIntoConstraints = false;
-            }
+            return view.WithLayoutAttribute(LayoutAttribute.Left);
         }
 
-        public static UIViewAndLayoutAttribute Left(this UIView view)
+		public static ViewAndLayoutAttribute<T> Right<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Left);
+            return view.WithLayoutAttribute(LayoutAttribute.Right);
         }
 
-        public static UIViewAndLayoutAttribute Right(this UIView view)
+        public static ViewAndLayoutAttribute<T> Top<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Right);
+            return view.WithLayoutAttribute(LayoutAttribute.Top);
         }
 
-        public static UIViewAndLayoutAttribute Top(this UIView view)
+		public static ViewAndLayoutAttribute<T> Bottom<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Top);
+            return view.WithLayoutAttribute(LayoutAttribute.Bottom);
         }
 
-        public static UIViewAndLayoutAttribute Bottom(this UIView view)
+		public static ViewAndLayoutAttribute<T> Baseline<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Bottom);
+            return view.WithLayoutAttribute(LayoutAttribute.Baseline);
         }
 
-        public static UIViewAndLayoutAttribute Baseline(this UIView view)
+		public static ViewAndLayoutAttribute<T> Trailing<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Baseline);
+            return view.WithLayoutAttribute(LayoutAttribute.Trailing);
         }
 
-        public static UIViewAndLayoutAttribute Trailing(this UIView view)
+		public static ViewAndLayoutAttribute<T> Leading<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Trailing);
+            return view.WithLayoutAttribute(LayoutAttribute.Leading);
         }
 
-        public static UIViewAndLayoutAttribute Leading(this UIView view)
+		public static ViewAndLayoutAttribute<T> CenterX<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Leading);
+            return view.WithLayoutAttribute(LayoutAttribute.CenterX);
         }
 
-        public static UIViewAndLayoutAttribute CenterX(this UIView view)
+		public static ViewAndLayoutAttribute<T> CenterY<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.CenterX);
+            return view.WithLayoutAttribute(LayoutAttribute.CenterY);
         }
 
-        public static UIViewAndLayoutAttribute CenterY(this UIView view)
+		public static ViewAndLayoutAttribute<T> Height<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.CenterY);
+            return view.WithLayoutAttribute(LayoutAttribute.Height);
         }
 
-        public static UIViewAndLayoutAttribute Height(this UIView view)
+		public static ViewAndLayoutAttribute<T> Width<T>(this T view)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Height);
+            return view.WithLayoutAttribute(LayoutAttribute.Width);
         }
 
-        public static UIViewAndLayoutAttribute Width(this UIView view)
+		public static ViewAndLayoutAttribute<T> WithLayoutAttribute<T>(this T view, LayoutAttribute attribute)
         {
-            return view.WithLayoutAttribute(NSLayoutAttribute.Width);
-        }
-
-        public static UIViewAndLayoutAttribute WithLayoutAttribute(this UIView view, NSLayoutAttribute attribute)
-        {
-            return new UIViewAndLayoutAttribute(view, attribute);
-        }
-
-        public static void AddConstraints(this UIView view, params FluentLayout[] fluentLayouts)
-        {
-            view.AddConstraints(fluentLayouts
-                                    .Where(fluent => fluent != null)
-                                    .SelectMany(fluent => fluent.ToLayoutConstraints())
-                                    .ToArray());
-        }
-
-        public static void AddConstraints(this UIView view, IEnumerable<FluentLayout> fluentLayouts)
-        {
-            view.AddConstraints(fluentLayouts
-                                    .Where(fluent => fluent != null)
-                                    .SelectMany(fluent => fluent.ToLayoutConstraints())
-                                    .ToArray());
+			//TODO ViewAndLayoutAttribute factory or dependency injection?
+			return null;
+            //return new UIViewAndLayoutAttribute(view, attribute);
         }
     }
 }

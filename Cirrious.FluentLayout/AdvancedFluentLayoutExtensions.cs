@@ -12,114 +12,114 @@ namespace Cirrious.FluentLayouts.Touch
 {
     public static class AdvancedFluentLayoutExtensions
     {
-        public static FluentLayout AtTopOf(this UIView view, UIView parentView, float margin = 0f)
+		public static IFluentLayout<T> AtTopOf<T>(this T view, T parentView, float margin = 0f)
         {
             return view.Top().EqualTo().TopOf(parentView).Plus(margin);
         }
 
-        public static FluentLayout AtLeftOf(this UIView view, UIView parentView, float margin = 0f)
+		public static IFluentLayout<T> AtLeftOf<T>(this T view, T parentView, float margin = 0f)
         {
             return view.Left().EqualTo().LeftOf(parentView).Plus(margin);
         }
 
-        public static FluentLayout AtRightOf(this UIView view, UIView parentView, float margin = 0f)
+		public static IFluentLayout<T> AtRightOf<T>(this T view, T parentView, float margin = 0f)
         {
             return view.Right().EqualTo().RightOf(parentView).Minus(margin);
         }
 
-        public static FluentLayout AtBottomOf(this UIView view, UIView parentView, float margin = 0f)
+		public static IFluentLayout<T> AtBottomOf<T>(this T view, T parentView, float margin = 0f)
         {
             return view.Bottom().EqualTo().BottomOf(parentView).Minus(margin);
         }
 
-        public static FluentLayout Below(this UIView view, UIView previous, float margin = 0f)
+		public static IFluentLayout<T> Below<T>(this T view, T previous, float margin = 0f)
         {
             return view.Top().EqualTo().BottomOf(previous).Plus(margin);
         }
 
-        public static FluentLayout Above(this UIView view, UIView previous, float margin = 0f)
+		public static IFluentLayout<T> Above<T>(this T view, T previous, float margin = 0f)
         {
             return view.Bottom().EqualTo().TopOf(previous).Minus(margin);
         }
 
-        public static FluentLayout WithSameLeft(this UIView view, UIView previous)
+		public static IFluentLayout<T> WithSameLeft<T>(this T view, T previous)
         {
             return view.Left().EqualTo().LeftOf(previous);
         }
 
-        public static FluentLayout WithSameTop(this UIView view, UIView previous)
+		public static IFluentLayout<T> WithSameTop<T>(this T view, T previous)
         {
             return view.Top().EqualTo().TopOf(previous);
         }
 
-        public static FluentLayout WithSameCenterX(this UIView view, UIView previous)
+		public static IFluentLayout<T> WithSameCenterX<T>(this T view, T previous)
         {
             return view.CenterX().EqualTo().CenterXOf(previous);
         }
 
-        public static FluentLayout WithSameCenterY(this UIView view, UIView previous)
+		public static IFluentLayout<T> WithSameCenterY<T>(this T view, T previous)
         {
             return view.CenterY().EqualTo().CenterYOf(previous);
         }
 
-        public static FluentLayout WithSameRight(this UIView view, UIView previous)
+		public static IFluentLayout<T> WithSameRight<T>(this T view, T previous)
         {
             return view.Right().EqualTo().RightOf(previous);
         }
 
-        public static FluentLayout WithSameWidth(this UIView view, UIView previous)
+		public static IFluentLayout<T> WithSameWidth<T>(this T view, T previous)
         {
             return view.Width().EqualTo().WidthOf(previous);
         }
 
-        public static FluentLayout WithSameBottom(this UIView view, UIView previous)
+		public static IFluentLayout<T> WithSameBottom<T>(this T view, T previous)
         {
             return view.Bottom().EqualTo().BottomOf(previous);
         }
 
-        public static FluentLayout WithRelativeWidth(this UIView view, UIView previous, float scale = 1.0f)
+		public static IFluentLayout<T> WithRelativeWidth<T>(this T view, T previous, float scale = 1.0f)
         {
             return view.Width().EqualTo().WidthOf(previous).WithMultiplier(scale);
         }
 
-        public static FluentLayout WithSameHeight(this UIView view, UIView previous)
+		public static IFluentLayout<T> WithSameHeight<T>(this T view, T previous)
         {
             return view.Height().EqualTo().HeightOf(previous);
         }
 
-        public static FluentLayout WithRelativeHeight(this UIView view, UIView previous, float scale = 1.0f)
+		public static IFluentLayout<T> WithRelativeHeight<T>(this T view, T previous, float scale = 1.0f)
         {
             return view.Height().EqualTo().HeightOf(previous).WithMultiplier(scale);
         }
 
-        public static FluentLayout ToRightOf(this UIView view, UIView previous, float margin = 0f)
+		public static IFluentLayout<T> ToRightOf<T>(this T view, T previous, float margin = 0f)
         {
             return view.Left().EqualTo().RightOf(previous).Plus(margin);
         }
 
-        public static FluentLayout ToLeftOf(this UIView view, UIView previous, float margin = 0f)
+		public static IFluentLayout<T> ToLeftOf<T>(this T view, T previous, float margin = 0f)
         {
             return view.Right().EqualTo().LeftOf(previous).Minus(margin);
         }
 
-        public static IEnumerable<FluentLayout> FullWidthOf(this UIView view, UIView parent, float margin = 0f)
+		public static IEnumerable<IFluentLayout<T>> FullWidthOf<T>(this T view, T parent, float margin = 0f)
         {
             yield return view.Left().EqualTo().LeftOf(parent).Plus(margin);
             yield return view.Right().EqualTo().RightOf(parent).Minus(margin);
         }
 
-        public static IEnumerable<FluentLayout> FullHeightOf(this UIView view, UIView parent, float margin = 0f)
+		public static IEnumerable<IFluentLayout<T>> FullHeightOf<T>(this T view, T parent, float margin = 0f)
         {
             yield return view.Top().EqualTo().TopOf(parent).Plus(margin);
             yield return view.Bottom().EqualTo().BottomOf(parent).Minus(margin);
         }
 
-        public static IEnumerable<FluentLayout> VerticalStackPanelConstraints(this UIView parentView, Margins margins,
-                                                                              params UIView[] views)
+		public static IEnumerable<IFluentLayout<T>> VerticalStackPanelConstraints<T>(this T parentView, Margins margins,
+                                                                              params T[] views)
         {
             margins = margins ?? new Margins();
 
-            UIView previous = null;
+			T previous = default(T);
             foreach (var view in views)
             {
                 yield return view.Left().EqualTo().LeftOf(parentView).Plus(margins.Left);
@@ -130,8 +130,11 @@ namespace Cirrious.FluentLayouts.Touch
                     yield return view.Top().EqualTo().TopOf(parentView).Plus(margins.Top);
                 previous = view;
             }
+
+			/*
             if (parentView is UIScrollView)
                 yield return previous.Bottom().EqualTo().BottomOf(parentView).Minus(margins.Bottom);
-        }
+			*/
+		}
     }
 }

@@ -12,10 +12,10 @@ using MonoTouch.UIKit;
 
 namespace Cirrious.FluentLayouts.Touch
 {
-    public class FluentLayout
+    public class FluentLayout : FluentLayoutGeneric<NSObject>
     {
         public FluentLayout(
-            UIView view,
+            NSObject view,
             NSLayoutAttribute attribute,
             NSLayoutRelation relation,
             NSObject secondItem,
@@ -30,7 +30,7 @@ namespace Cirrious.FluentLayouts.Touch
             Priority = (float) UILayoutPriority.Required;
         }
 
-        public FluentLayout(UIView view,
+        public FluentLayout(NSObject view,
                             NSLayoutAttribute attribute,
                             NSLayoutRelation relation,
                             float constant = 0f)
@@ -43,96 +43,69 @@ namespace Cirrious.FluentLayouts.Touch
             Priority = (float) UILayoutPriority.Required;
         }
 
-        public UIView View { get; private set; }
+        public NSObject View { get; private set; }
         public NSLayoutAttribute Attribute { get; private set; }
         public NSLayoutRelation Relation { get; private set; }
         public NSObject SecondItem { get; private set; }
         public NSLayoutAttribute SecondAttribute { get; private set; }
-        public float Multiplier { get; private set; }
-        public float Constant { get; private set; }
-        public float Priority { get; private set; }
-
-        public FluentLayout Plus(float constant)
-        {
-            Constant += constant;
-            return this;
-        }
-
-        public FluentLayout Minus(float constant)
-        {
-            Constant -= constant;
-            return this;
-        }
-
-        public FluentLayout WithMultiplier(float multiplier)
-        {
-            Multiplier = multiplier;
-            return this;
-        }
-
-        public FluentLayout SetPriority(float priority)
-        {
-            Priority = priority;
-            return this;
-        }
-
+       
         public FluentLayout SetPriority(UILayoutPriority priority)
         {
             Priority = (float) priority;
             return this;
         }
 
-        public FluentLayout LeftOf(NSObject view2)
+		public override IFluentLayout<NSObject> LeftOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Left);
         }
 
-        public FluentLayout RightOf(NSObject view2)
+		public override IFluentLayout<NSObject> RightOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Right);
         }
 
-        public FluentLayout TopOf(NSObject view2)
+		public override IFluentLayout<NSObject> TopOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Top);
         }
 
-        public FluentLayout BottomOf(NSObject view2)
+		public override IFluentLayout<NSObject> BottomOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Bottom);
         }
 
-        public FluentLayout BaselineOf(NSObject view2)
+		public override IFluentLayout<NSObject> BaselineOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Baseline);
         }
 
-        public FluentLayout TrailingOf(NSObject view2)
+		public override IFluentLayout<NSObject> TrailingOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Trailing);
         }
 
-        public FluentLayout LeadingOf(NSObject view2)
+		public override IFluentLayout<NSObject> LeadingOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Leading);
         }
 
-        public FluentLayout CenterXOf(NSObject view2)
+		public override IFluentLayout<NSObject> CenterXOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.CenterX);
         }
 
-        public FluentLayout CenterYOf(NSObject view2)
+		public override IFluentLayout<NSObject> CenterYOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.CenterY);
         }
 
-        public FluentLayout HeightOf(NSObject view2)
+		public override IFluentLayout<NSObject> HeightOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Height);
         }
 
-        public FluentLayout WidthOf(NSObject view2)
+		public override IFluentLayout<NSObject> WidthOf(NSObject view2)
         {
             return SetSecondItem(view2, NSLayoutAttribute.Width);
         }
