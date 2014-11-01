@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MonoTouch.UIKit;
 
-namespace Cirrious.FluentLayouts.Touch.RowSet
+namespace Cirrious.FluentLayouts.RowSet
 {
     public class RowSetTemplate
     {
