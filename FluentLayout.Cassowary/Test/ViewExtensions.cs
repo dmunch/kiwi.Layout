@@ -30,7 +30,7 @@ namespace FluentLayout.Cassowary
 				new ViewAndLayoutEqualityComparer()
 			);
 
-		public static string AddConstraints<T> (this View view, params IFluentLayout<T>[] constraints)
+		public static string AddConstraints<T> (this View view, params IFluentLayout<T>[] fluentLayouts)
 			where T: View
 		{
 			ClSimplexSolver solver = null;
@@ -54,70 +54,8 @@ namespace FluentLayout.Cassowary
 				solver.AddStay (variable);
 			}
 
-			foreach (var constraint in constraints) {
-				ClLinearExpression firstExpression = null;
-				switch(constraint.Attribute)
-				{
-				case LayoutAttribute.Width:
-					var leftVar = GetVariableFromViewAndAttribute (constraint.View, LayoutAttribute.Left);
-					var rightVar = GetVariableFromViewAndAttribute (constraint.View, LayoutAttribute.Right);
-					firstExpression = Cl.Minus (
-						new ClLinearExpression(rightVar), 
-						new ClLinearExpression(leftVar)
-					);
-					break;
-				case LayoutAttribute.Height:
-					var topVar = GetVariableFromViewAndAttribute (constraint.View, LayoutAttribute.Top);
-					var bottomVar = GetVariableFromViewAndAttribute (constraint.View, LayoutAttribute.Bottom);
-					firstExpression = Cl.Minus (
-						new ClLinearExpression(bottomVar), 
-						new ClLinearExpression(topVar)
-					);
-					break;
-				default:
-					var firstVariable = GetVariableFromViewAndAttribute (constraint.View, constraint.Attribute);
-					firstExpression = new ClLinearExpression (firstVariable);
-					break;
-				}
-
-
-				ClLinearExpression secondExpression = null;
-
-				if (constraint.SecondItem != null) {
-					var secondVariable = GetVariableFromViewAndAttribute (constraint.SecondItem.View, constraint.SecondItem.Attribute);
-					secondExpression = Cl.Plus (
-						Cl.Times (secondVariable, constraint.Multiplier),
-						new ClLinearExpression (constraint.Constant)
-					);
-				} else {
-					secondExpression = new ClLinearExpression (constraint.Constant);
-				}
-
-				ClConstraint cn = null;
-				switch (constraint.Relation) {
-				case LayoutRelation.Equal:
-					cn = new ClLinearEquation (
-						firstExpression,
-						secondExpression
-					);
-					break;
-				case LayoutRelation.GreaterThanOrEqual:
-					cn = new ClLinearInequality (
-						firstExpression,
-						Cl.GEQ,
-						secondExpression
-					);
-					break;
-				case LayoutRelation.LessThanOrEqual:
-					cn = new ClLinearInequality (
-						firstExpression,
-						Cl.LEQ,
-						secondExpression
-					);
-					break;
-				}
-
-				cn.Strength = ClStrength.Required;
+			foreach (var fluentLayout in fluentLayouts) {
+				var cn = GetConstraintFromFluentLayout (fluentLayout);
 				solver.AddConstraint (cn);
 			}
 			solver.Solve ();
@@ -128,6 +66,84 @@ namespace FluentLayout.Cassowary
 			}
 
 			return solver.ToString ();
+		}
+
+		public static ClConstraint GetConstraintFromFluentLayout<T>(IFluentLayout<T> fluentLayout)
+			where T: View
+		{
+			ClLinearExpression firstExpression = null;
+			firstExpression = GetExpressionFromViewAndAttribute (fluentLayout.View, fluentLayout.Attribute);
+
+			ClLinearExpression secondExpression = null;
+			if (fluentLayout.SecondItem != null) {
+				secondExpression = GetExpressionFromViewAndAttribute (
+					fluentLayout.SecondItem.View,
+					fluentLayout.SecondItem.Attribute
+				);
+				secondExpression = Cl.Plus (
+					Cl.Times (secondExpression, fluentLayout.Multiplier),
+					new ClLinearExpression (fluentLayout.Constant)
+				);
+			} else {
+				secondExpression = new ClLinearExpression (fluentLayout.Constant);
+			}
+
+			ClConstraint cn = null;
+			switch (fluentLayout.Relation) {
+			case LayoutRelation.Equal:
+				cn = new ClLinearEquation (
+					firstExpression,
+					secondExpression
+				);
+				break;
+			case LayoutRelation.GreaterThanOrEqual:
+				cn = new ClLinearInequality (
+					firstExpression,
+					Cl.GEQ,
+					secondExpression
+				);
+				break;
+			case LayoutRelation.LessThanOrEqual:
+				cn = new ClLinearInequality (
+					firstExpression,
+					Cl.LEQ,
+					secondExpression
+				);
+				break;
+			}
+
+			cn.Strength = ClStrength.Required;
+			return cn;
+		}
+
+		public static ClLinearExpression GetExpressionFromViewAndAttribute(View view, LayoutAttribute attribute)
+		{
+			ClLinearExpression expression = null;
+			switch(attribute)
+			{
+			case LayoutAttribute.Width:
+				var leftVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Left);
+				var rightVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Right);
+				expression = Cl.Minus (
+					new ClLinearExpression(rightVar), 
+					new ClLinearExpression(leftVar)
+				);
+				break;
+			case LayoutAttribute.Height:
+				var topVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Top);
+				var bottomVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Bottom);
+				expression = Cl.Minus (
+					new ClLinearExpression(bottomVar), 
+					new ClLinearExpression(topVar)
+				);
+				break;
+			default:
+				var variable = GetVariableFromViewAndAttribute (view, attribute);
+				expression = new ClLinearExpression (variable);
+				break;
+			}
+
+			return expression;
 		}
 
 		public static ClVariable GetVariableFromViewAndAttribute(View view, LayoutAttribute attribute)
