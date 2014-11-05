@@ -127,14 +127,14 @@ namespace FluentLayout.Cassowary
 			case LayoutRelation.GreaterThanOrEqual:
 				cn = new ClLinearInequality (
 					firstExpression,
-					Cl.GEQ,
+					Cl.Operator.GreaterThanOrEqualTo,
 					secondExpression
 				);
 				break;
 			case LayoutRelation.LessThanOrEqual:
 				cn = new ClLinearInequality (
 					firstExpression,
-					Cl.LEQ,
+					Cl.Operator.LessThanOrEqualTo,
 					secondExpression
 				);
 				break;
