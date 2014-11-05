@@ -61,7 +61,7 @@ namespace FluentLayout.Cassowary
 			foreach (var attribute in stayAttributes) {
 				var variable = GetVariableFromViewAndAttribute (view, attribute);
 
-				solver.AddStay (variable);
+				solver.AddStay (variable, ClStrength.Strong);
 			}
 
 			foreach (var fluentLayout in fluentLayouts) {
@@ -140,7 +140,7 @@ namespace FluentLayout.Cassowary
 				break;
 			}
 
-			cn.Strength = ClStrength.Required;
+			cn.Strength = ClStrength.Strong;
 			return cn;
 		}
 
