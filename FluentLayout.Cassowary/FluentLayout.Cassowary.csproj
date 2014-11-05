@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{0D519429-6590-468C-8B57-C1E7F1965833}</ProjectGuid>
+    <ProjectGuid>{72BC634F-ABA5-4735-9B9E-A6701056258F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>FluentLayout.Cassowary</RootNamespace>
     <AssemblyName>FluentLayout.Cassowary</AssemblyName>
@@ -41,13 +41,13 @@
     <Folder Include="Test\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cirrious.FluentLayouts\Cirrious.FluentLayouts.csproj">
+    <ProjectReference Include="..\Cassowary\Cassowary.Pcl\Cassowary.Pcl.csproj">
+      <Project>{5821E5B2-3621-4B74-AA19-A94DB5B9DE00}</Project>
+      <Name>Cassowary.Pcl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cirrious.FluentLayout\Cirrious.FluentLayouts\Cirrious.FluentLayouts.csproj">
       <Project>{5697A587-ACC0-4C2D-8C4A-6E49A89EA804}</Project>
       <Name>Cirrious.FluentLayouts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Cassowary.net\Cassowary.Pcl\Cassowary.Pcl.csproj">
-      <Project>{9B7E8B7B-B573-4124-8543-8EEDD3BE84EA}</Project>
-      <Name>Cassowary.Pcl</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -1,0 +1,8 @@
+[submodule "Cassowary"]
+	path = Cassowary
+	url = https://github.com/dmunch/Cassowary.net.git
+	branch = pcl
+[submodule "Cirrious.FluentLayout"]
+	path = Cirrious.FluentLayout
+	url = https://github.com/dmunch/Cirrious.FluentLayout.git
+	branch = generic

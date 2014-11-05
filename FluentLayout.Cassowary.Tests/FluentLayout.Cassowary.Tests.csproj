@@ -36,13 +36,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\Cirrious.FluentLayouts\Cirrious.FluentLayouts.csproj">
+    <ProjectReference Include="..\FluentLayout.Cassowary\FluentLayout.Cassowary.csproj">
+      <Project>{72BC634F-ABA5-4735-9B9E-A6701056258F}</Project>
+      <Name>FluentLayout.Cassowary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cirrious.FluentLayout\Cirrious.FluentLayouts\Cirrious.FluentLayouts.csproj">
       <Project>{5697A587-ACC0-4C2D-8C4A-6E49A89EA804}</Project>
       <Name>Cirrious.FluentLayouts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FluentLayout.Cassowary\FluentLayout.Cassowary.csproj">
-      <Project>{0D519429-6590-468C-8B57-C1E7F1965833}</Project>
-      <Name>FluentLayout.Cassowary</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
