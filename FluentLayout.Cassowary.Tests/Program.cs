@@ -23,22 +23,28 @@ namespace FluentLayout.Cassowary.Tests
 	{
 		public static void Main (string[] args)
 		{
-			var v = new View (0, 60, 0, 20, 'x');
-			var v1 = new View (0, 10, 0, 5, 'o');
-			var v2 = new View (10, 20, 0, 10, 'i');
+			var v = new View (0, 60, 0, 20, ' ');
+			var vo = new View (0, 10, 0, 5, 'o');
+			var vi = new View (10, 20, 0, 10, 'i');
+			var vk = new View (0, 0, 0, 0, 'k');
 
-			v.AddChild(v1);
-			v.AddChild(v2);
+			v.AddChild(vo);
+			v.AddChild(vi);
+			v.AddChild (vk);
 
 			var tableau = v.AddConstraints(
-				v1.WithSameRight(v),
-				v1.WithSameTop(v),
-				v1.Width().EqualTo(5),
-				v1.Height().EqualTo(5),
-				v2.Below (v1),
-				v2.Width().EqualTo(6),
-				v2.Height().EqualTo(7),
-				v2.WithSameRight(v)
+				vo.WithSameRight(v),
+				vo.WithSameTop(v),
+				vo.Width().EqualTo(5),
+				vo.Height().EqualTo(5),
+				vi.Below (vo),
+				vi.Width().EqualTo(6),
+				vi.Height().EqualTo(7),
+				vi.WithSameRight(v),
+				vk.Right().LessThanOrEqualTo().LeftOf(vo),
+				vk.Top().GreaterThanOrEqualTo(4),
+				vk.WithSameWidth(vo),
+				vk.WithSameHeight(vo)
 			);
 
 			Console.WriteLine (tableau);
