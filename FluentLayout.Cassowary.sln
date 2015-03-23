@@ -67,6 +67,6 @@ Global
 		{5697A587-ACC0-4C2D-8C4A-6E49A89EA804} = {45E8214A-22FD-4796-A193-7C91B0546DAA}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = FluentLayout.Cassowary.Tests\FluentLayout.Cassowary.Tests.csproj
+		StartupItem = FluentLayout.Android\FluentLayout.Android.csproj
 	EndGlobalSection
 EndGlobal
