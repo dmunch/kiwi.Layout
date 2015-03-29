@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-using MonoTouch.UIKit;
-using MonoTouch.Foundation;
+using UIKit;
+using Foundation;
 
 namespace Cirrious.FluentLayouts.Touch
 {
