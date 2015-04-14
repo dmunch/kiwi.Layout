@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -38,6 +38,12 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cassowary.Pcl">
+      <HintPath>..\packages\Cassowary.Pcl.1.0.0-CI00001\lib\portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1\Cassowary.Pcl.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.FluentLayout">
+      <HintPath>..\packages\Cirrious.FluentLayout.1.0.0-CI00000\lib\portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1\Cirrious.FluentLayout.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -51,6 +57,7 @@
     <Compile Include="FluentLayout.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
@@ -64,14 +71,6 @@
     <ProjectReference Include="..\FluentLayout.Cassowary\FluentLayout.Cassowary.csproj">
       <Project>{72BC634F-ABA5-4735-9B9E-A6701056258F}</Project>
       <Name>FluentLayout.Cassowary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cirrious.FluentLayout\Cirrious.FluentLayouts\Cirrious.FluentLayouts.csproj">
-      <Project>{5697A587-ACC0-4C2D-8C4A-6E49A89EA804}</Project>
-      <Name>Cirrious.FluentLayouts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cassowary\Cassowary.Pcl\Cassowary.Pcl.csproj">
-      <Project>{5821E5B2-3621-4B74-AA19-A94DB5B9DE00}</Project>
-      <Name>Cassowary.Pcl</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

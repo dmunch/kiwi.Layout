@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -37,17 +37,16 @@
     <Compile Include="IViewEngine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Test\" />
+    <Reference Include="Cassowary.Pcl">
+      <HintPath>..\packages\Cassowary.Pcl.1.0.0-CI00001\lib\portable-net45+win+wp80\Cassowary.Pcl.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.FluentLayout">
+      <HintPath>..\packages\Cirrious.FluentLayout.1.0.0-CI00000\lib\portable-net45+win+wp80\Cirrious.FluentLayout.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cassowary\Cassowary.Pcl\Cassowary.Pcl.csproj">
-      <Project>{5821E5B2-3621-4B74-AA19-A94DB5B9DE00}</Project>
-      <Name>Cassowary.Pcl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Cirrious.FluentLayout\Cirrious.FluentLayouts\Cirrious.FluentLayouts.csproj">
-      <Project>{5697A587-ACC0-4C2D-8C4A-6E49A89EA804}</Project>
-      <Name>Cirrious.FluentLayouts</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

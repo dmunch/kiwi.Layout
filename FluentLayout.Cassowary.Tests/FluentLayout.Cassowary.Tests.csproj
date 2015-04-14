@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -28,6 +28,9 @@
     <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cirrious.FluentLayout">
+      <HintPath>..\packages\Cirrious.FluentLayout.1.0.0-CI00000\lib\portable-net45+win+wp80\Cirrious.FluentLayout.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -40,9 +43,8 @@
       <Project>{72BC634F-ABA5-4735-9B9E-A6701056258F}</Project>
       <Name>FluentLayout.Cassowary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cirrious.FluentLayout\Cirrious.FluentLayouts\Cirrious.FluentLayouts.csproj">
-      <Project>{5697A587-ACC0-4C2D-8C4A-6E49A89EA804}</Project>
-      <Name>Cirrious.FluentLayouts</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
