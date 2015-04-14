@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>0.1.0</version>
+    <title>Cirrious.FluentLayout</title>
+    <authors>Stuart Lodge, Alexay Bogdanov, Daniel Münch</authors>
+    <owners>Daniel Münch</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A fluent API for linear constraints based layout solvers.</description>
+    <releaseNotes>Initial Release.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>fluent API linear constraints solver autolayout</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\$configuration$\$id$.dll" target="lib\portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1"></file>
+  </files>
+</package>
