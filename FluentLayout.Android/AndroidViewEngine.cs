@@ -12,6 +12,11 @@ namespace FluentLayout.Android
 
 		public string GetViewName (View.View view)
 		{
+            /*
+            if(view.Id == 0)
+            {
+                throw new ArgumentException("Id can't be 0", "Id");
+            }*/
 			return view.Id.ToString();
 		}
 
@@ -30,6 +35,10 @@ namespace FluentLayout.Android
 			case LayoutAttribute.Bottom:
 				return v.Bottom;
 				break;
+            case LayoutAttribute.Height:
+                return v.Height;
+            case LayoutAttribute.Width:
+                return v.Width;                
 			default:
 				throw new NotImplementedException(string.Format("Attribute not implemented: {0}", attribute));
 			}
@@ -52,6 +61,10 @@ namespace FluentLayout.Android
 			case LayoutAttribute.Bottom:
 				v.Bottom = intVal;
 				break;
+            case LayoutAttribute.Height:
+            case LayoutAttribute.Width:
+                break;
+
 			default:
 				throw new NotImplementedException (string.Format ("Attribute not implemented: {0}", attribute));
 			}
