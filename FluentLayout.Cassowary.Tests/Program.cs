@@ -32,12 +32,15 @@ namespace FluentLayout.Cassowary.Tests
 			v.AddChild(vi);
 			v.AddChild (vk);
 
+            var voHeight = vo.Height().EqualTo(5);
+            var voTop = vo.Top().EqualTo(10);
 			var tableau = v.AddConstraints(
 				vo.WithSameRight(v),
-				vo.WithSameTop(v),
+				//vo.WithSameTop(v),                
+                voTop,
 				vo.Width().EqualTo(5),
-				vo.Height().EqualTo(5),
-				vi.Below (vo),
+                voHeight,
+				vi.Below (vo, 20),
 				vi.Width().EqualTo(6),
 				vi.Height().EqualTo(7),
 				vi.WithSameRight(v),
@@ -47,12 +50,24 @@ namespace FluentLayout.Cassowary.Tests
 				vk.WithSameHeight(vo)
 			);
 
-			Console.WriteLine (tableau);
+            ViewExtensions.SetValues();
+            Console.WriteLine("Vo: {0}", vo.ToString());
+            Console.WriteLine("Vi: {0}", vi.ToString());
+            Console.WriteLine("Vk: {0}", vk.ToString());
+            
+            //Console.ReadLine();
+			//Console.WriteLine (tableau);
 
-			Console.WriteLine ("Start.");
+           
 			ViewPrinter.Print (v);
+            Console.ReadLine();
 
-			Console.WriteLine ("End.");
+            //v.UpdateConstraints(new IFluentLayout<View>[] { voHeight }, new double[] { 20 });
+            v.UpdateConstraints(new IFluentLayout<View>[] { voTop }, new double[] { 0 });
+            ViewExtensions.SetValues();
+
+            ViewPrinter.Print(v);
+            Console.ReadLine();
 		}
 	}
 }

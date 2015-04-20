@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FluentLayout.Cassowary
 {
@@ -44,7 +45,10 @@ namespace FluentLayout.Cassowary
 
 		public char[,] Draw()
 		{
-			var canvas = new char[Width + Left, Height + Top];
+            var widthMax = this.children.Max(c => c.Width + c.Left);
+            var heightMax = this.children.Max(c => c.Height + c.Top);
+
+			var canvas = new char[widthMax, heightMax];
 			this.Draw (canvas);
 
 			return canvas;
@@ -66,6 +70,11 @@ namespace FluentLayout.Cassowary
 
 			this.Color = color;
 		}
+
+        public override string ToString()
+        {
+            return string.Format("{0} l: {1}, t: {2}, w: {3}, h: {4}", Color, Left, Top, Width, Height);
+        }
 	}
 }
 

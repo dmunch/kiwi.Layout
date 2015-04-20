@@ -29,6 +29,10 @@ namespace FluentLayout.Cassowary
 			case LayoutAttribute.Bottom:
 				return v.Bottom;
 				break;
+            case LayoutAttribute.Width:
+                return v.Width;
+            case LayoutAttribute.Height:
+                return v.Height;
 			default:
 				throw new NotImplementedException(string.Format("Attribute not implemented: {0}", attribute));
 			}
@@ -51,6 +55,9 @@ namespace FluentLayout.Cassowary
 			case LayoutAttribute.Bottom:
 				v.Bottom = intVal;
 				break;
+            case LayoutAttribute.Width:
+            case LayoutAttribute.Height:
+                break;
 			default:
 				throw new NotImplementedException (string.Format ("Attribute not implemented: {0}", attribute));
 			}
@@ -68,6 +75,17 @@ namespace FluentLayout.Cassowary
 			fluentEngine.AddConstraints (view, fluentLayouts);
 			return fluentEngine.Solve (view);
 		}
+
+        public static void UpdateConstraints<T>(this View view, IEnumerable<IFluentLayout<T>> constraints, IEnumerable<double> values)
+            where T:View
+        {
+            fluentEngine.SetEditedValues(view, constraints, values);
+        }
+
+        public static void SetValues()
+        {
+            fluentEngine.SetValues();
+        }
 	}
 }
 
