@@ -38,7 +38,11 @@ namespace FluentLayout.Android
             case LayoutAttribute.Height:
                 return v.Height;
             case LayoutAttribute.Width:
-                return v.Width;                
+                return v.Width;
+            case LayoutAttribute.CenterX:
+                return v.Left + v.Width / 2;
+            case LayoutAttribute.CenterY:
+                return v.Top + v.Height / 2;
 			default:
 				throw new NotImplementedException(string.Format("Attribute not implemented: {0}", attribute));
 			}
@@ -63,6 +67,8 @@ namespace FluentLayout.Android
 				break;
             case LayoutAttribute.Height:
             case LayoutAttribute.Width:
+            case LayoutAttribute.CenterX:
+            case LayoutAttribute.CenterY:
                 break;
 
 			default:

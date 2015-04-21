@@ -39,6 +39,7 @@ namespace FluentLayout.Cassowary
         public SolverWithView()
         {
             Solver = new ClSimplexSolver();
+            Solver.AutoSolve = true;
             AlreadySolved = false;
         }
     }
@@ -123,6 +124,7 @@ namespace FluentLayout.Cassowary
 
             
             SetEditConstraints(view, constraints);
+            solver.AutoSolve = false;
             solver.BeginEdit();
             foreach(var cv in constraints.Zip(values, (c, v) => new {c, v}))
             {                
@@ -130,6 +132,8 @@ namespace FluentLayout.Cassowary
                 variable.ChangeValue(cv.v);
                 solver.SuggestValue(variable, cv.v);
             }
+            //solver.Resolve();
+            solver.AutoSolve = true;
             solver.EndEdit();
             /*
             foreach (var cv in constraints.Zip(values, (c, v) => new { c, v }))
@@ -315,35 +319,73 @@ namespace FluentLayout.Cassowary
 			switch(attribute)
 			{
 			    case LayoutAttribute.Width:
-				    var leftVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Left);
-				    var rightVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Right);
+                    { 
+				        var leftVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Left);
+				        var rightVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Right);
 				
-                    var widthExpression = Cl.Minus (
-					    new ClLinearExpression(rightVar), 
-					    new ClLinearExpression(leftVar)
-				    );
+                        var widthExpression = Cl.Minus (
+					        new ClLinearExpression(rightVar), 
+					        new ClLinearExpression(leftVar)
+				        );
 
-                    var widthVariable = new ClVariable(viewEngine.GetViewName(view) + ".Width");
-                    egality = new ClLinearEquation(widthVariable, widthExpression);
-                    egality.Strength = ClStrength.Required;
+                        var widthVariable = new ClVariable(viewEngine.GetViewName(view) + ".Width");
+                        egality = new ClLinearEquation(widthVariable, widthExpression);
+                        egality.Strength = ClStrength.Required;
 
-                    AddVariableForViewAndAttribute(view, attribute, widthVariable);
-                    return new ClLinearExpression(widthVariable);
+                        AddVariableForViewAndAttribute(view, attribute, widthVariable);
+                        return new ClLinearExpression(widthVariable);
+                    }
 			    case LayoutAttribute.Height:
-				    var topVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Top);
-				    var bottomVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Bottom);
+                    { 
+				        var topVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Top);
+				        var bottomVar = GetVariableFromViewAndAttribute (view, LayoutAttribute.Bottom);
 
-				    var heightExpression = Cl.Minus (
-                        new ClLinearExpression(bottomVar), 
-					    new ClLinearExpression(topVar)
-				    );
+				        var heightExpression = Cl.Minus (
+                            new ClLinearExpression(bottomVar), 
+					        new ClLinearExpression(topVar)
+				        );
 
-                    var heightVariable = new ClVariable(viewEngine.GetViewName(view) + ".Height");
-                    egality = new ClLinearEquation(heightVariable, heightExpression);
-                    egality.Strength = ClStrength.Required;
+                        var heightVariable = new ClVariable(viewEngine.GetViewName(view) + ".Height");
+                        egality = new ClLinearEquation(heightVariable, heightExpression);
+                        egality.Strength = ClStrength.Required;
 
-                    AddVariableForViewAndAttribute(view, attribute, heightVariable);
-                    return new ClLinearExpression(heightVariable);
+                        AddVariableForViewAndAttribute(view, attribute, heightVariable);
+                        return new ClLinearExpression(heightVariable);
+                    }
+                case LayoutAttribute.CenterX:
+                    {
+                        var leftVar = GetVariableFromViewAndAttribute(view, LayoutAttribute.Left);
+                        var rightVar = GetVariableFromViewAndAttribute(view, LayoutAttribute.Right);
+
+                        var centerXExpression = Cl.Plus(
+                            Cl.Divide(new ClLinearExpression(leftVar), new ClLinearExpression(2)),
+                            Cl.Divide(new ClLinearExpression(rightVar), new ClLinearExpression(2))
+                        );
+
+                        var centerXVariable = new ClVariable(viewEngine.GetViewName(view) + ".CenterX");
+                        egality = new ClLinearEquation(centerXVariable, centerXExpression);
+                        egality.Strength = ClStrength.Required;
+
+                        AddVariableForViewAndAttribute(view, attribute, centerXVariable);
+                        return new ClLinearExpression(centerXVariable);
+                    }
+                case LayoutAttribute.CenterY:
+                    {
+                        var topVar = GetVariableFromViewAndAttribute(view, LayoutAttribute.Top);
+                        var bottomVar = GetVariableFromViewAndAttribute(view, LayoutAttribute.Bottom);
+
+                        var centerYExpression = Cl.Plus(
+                            Cl.Divide(new ClLinearExpression(topVar), new ClLinearExpression(2)),
+                            Cl.Divide(new ClLinearExpression(bottomVar), new ClLinearExpression(2))                            
+                        );
+                        
+                        var centerYVariable = new ClVariable(viewEngine.GetViewName(view) + ".CenterY");
+                        egality = new ClLinearEquation(centerYVariable, centerYExpression);
+                        egality.Strength = ClStrength.Required;
+
+                        AddVariableForViewAndAttribute(view, attribute, centerYVariable);
+                        return new ClLinearExpression(centerYVariable);
+                    }
 			    default:
 				    var variable = GetVariableFromViewAndAttribute (view, attribute);
 				    return new ClLinearExpression (variable);
@@ -361,8 +403,8 @@ namespace FluentLayout.Cassowary
 
 				variable = new ClVariable (name, value);
 				variables.Add (viewAndAttribute, variable);
-			} 
-
+			}
+            
 			return variable; 
 		}
 
