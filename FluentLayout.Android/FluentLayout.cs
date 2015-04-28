@@ -26,23 +26,39 @@ namespace FluentLayout.Android
             fluentEngine = new FluentEngine<View.View>(this, new AndroidViewEngine());
 		}
 
+        bool measured = false;
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
+
             var widthSpec = MeasureSpec.GetMode(widthMeasureSpec);
             var heightSpec = MeasureSpec.GetMode(heightMeasureSpec);
 
-            var width = (this.Parent as ViewGroup).Width - 50;            
-            var height = (int) fluentEngine.MeasureHeight(this, width);
+            var parentWidth = MeasureSpec.GetSize(widthMeasureSpec);
+            var parentHeight = MeasureSpec.GetSize(heightMeasureSpec);
 
-            MeasureChildViews();            
-            height = (int)fluentEngine.MeasureHeight(this);
+            if (measured)
+            {
+                this.SetMeasuredDimension(parentWidth, (int)fluentEngine.MeasureHeight(this));
+                return;
+            }
+                
+            measured = true;
+            
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
 
-            this.SetMeasuredDimension(width, height);
+            fluentEngine.MeasureHeight(this, parentWidth);
+            MeasureChildViews();
+            
+            var height = (int)fluentEngine.MeasureHeight(this);
+            this.SetMeasuredDimension(parentWidth, height);
+
+            sw.Stop();
+            System.Diagnostics.Debug.WriteLine("OnMeasure elapsed time {0}", sw.ElapsedMilliseconds);
         }
 
         protected float MeasureHeight(View.View tv)
         {
-            
             var width = (int)fluentEngine.MeasuredWidth(tv);
 
             var widthSpec = MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly);
@@ -54,26 +70,39 @@ namespace FluentLayout.Android
 
 		protected override void OnLayout (bool changed, int l, int t, int r, int b)
 		{
-            //SolveAndMeasure();
             if (!changed) return;
-            fluentEngine.SetValues();
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+
+            foreach(var child in ChildViews)
+            {
+                int vl = (int)fluentEngine.GetValue(child, LayoutAttribute.Left);
+                int vr = (int)fluentEngine.GetValue(child, LayoutAttribute.Right);
+                int vt = (int)fluentEngine.GetValue(child, LayoutAttribute.Top);
+                int vb = (int)fluentEngine.GetValue(child, LayoutAttribute.Bottom);
+                
+                child.Layout(vl, vt, vr, vb);
+            }
+            sw.Stop();
+            System.Diagnostics.Debug.WriteLine("OnLayout elapsed time {0}", sw.ElapsedMilliseconds);
 		}
 
         protected void MeasureChildViews()
         {
             //measure height for each text view after first layout cycle, once we know their widths
-            //add constraints for new textviews if any
             
-            var newConstraints = ChildViews.Except(_heightConstraints.Keys).Select(tv => tv.Height().GreaterThanOrEqualTo(MeasureHeight(tv))).ToArray();
-            fluentEngine.AddConstraints(newConstraints);
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();            
+            fluentEngine.SetEditedValues(ChildViews/*.OfType<TextView>()*/.Except(_heightConstraints.Keys).Select(tv => tv.Height().GreaterThanOrEqualTo(MeasureHeight(tv))));
+            sw.Stop();
 
-            //update constraints for existing textviews
-            fluentEngine.SetEditedValues(_heightConstraints.Values, _heightConstraints.Values.Select(hc => (double)MeasureHeight(hc.View)));
+            System.Diagnostics.Debug.WriteLine("MeasureChildViews:Constraints elapsed time {0}", sw.ElapsedMilliseconds);
+        }
 
-            foreach (var newConstraint in newConstraints)
-            {
-                _heightConstraints.Add(newConstraint.View, newConstraint);
-            }
+        public override void AddView(View.View v)
+        {
+            base.AddView(v);
+            fluentEngine.AddConstraint(v.Height().GreaterThanOrEqualTo(0));
         }
 
 		public void AddConstraints(params IFluentLayout<View.View>[] fluentLayouts)

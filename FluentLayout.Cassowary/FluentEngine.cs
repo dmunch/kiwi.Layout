@@ -74,7 +74,7 @@ namespace FluentLayout.Cassowary
         protected void Init()
         {
             solver = new ClSimplexSolver();
-            solver.AutoSolve = true;
+            solver.AutoSolve = false;
 
             var stayVariables = new LayoutAttribute[] {
 				    LayoutAttribute.Left,				    
@@ -100,31 +100,58 @@ namespace FluentLayout.Cassowary
             Init();
         }
 
-		public string AddConstraints (IEnumerable<IFluentLayout<T>> fluentLayouts)
+		public void AddConstraints (IEnumerable<IFluentLayout<T>> fluentLayouts)
 		{
-			foreach (var fluentLayout in fluentLayouts) {
+            foreach (var fluentLayout in fluentLayouts) {
 				foreach(var constraint in GetConstraintsFromFluentLayout (fluentLayout))
                 {
                     solver.AddConstraint(constraint);
                 }
 			}
-
+            solver.Solve();            
             _constraints.AddRange(fluentLayouts);
-			return solver.ToString ();
 		}
 
-        public void SetEditConstraints(IFluentLayout<T> constraint)
-        {            
-            if (constraint.SecondItem != null)
+        public void AddConstraint(IFluentLayout<T> constraint)
+        {
+            foreach (var c in GetConstraintsFromFluentLayout(constraint))
             {
-                throw new Exception("Edit constraint can't have a right side");
+                solver.AddConstraint(c);
             }
-
-            var variable = GetVariableFromViewAndAttribute(constraint.View, constraint.Attribute);
-            solver.AddEditVar(variable);
         }
 
-        
+#if false
+        public void AddStayConstraints(IEnumerable<IFluentLayout<T>> constraints)
+        {
+            //add constraints to solver
+            foreach (var fluentLayout in constraints)
+            {
+                foreach (var constraint in GetConstraintsFromFluentLayout(fluentLayout))
+                {
+                    solver.AddConstraint(constraint);
+                }
+            }
+            _constraints.AddRange(constraints);
+
+            foreach (var constraint in constraints)
+            {
+                if (constraint.SecondItem != null)
+                {
+                    throw new Exception("Edit constraint can't have a right side");
+                }
+
+                var variable = GetVariableFromViewAndAttribute(constraint.View, constraint.Attribute);
+                if (!isStay.ContainsKey(variable.Name))
+                {
+                    isStay.Add(variable.Name, 0);
+                    variable.ChangeValue(0);
+
+                    solver.AddStay(variable);                    
+                } 
+            }
+        }
+#endif
+
         protected void SetEditConstraints(IEnumerable<IFluentLayout<T>> constraints)
         {
             foreach(var constraint in constraints)
@@ -144,26 +171,32 @@ namespace FluentLayout.Cassowary
             if (!constraints.Any()) return;
 
             SetEditConstraints(constraints);
-            //solver.AutoSolve = false;
-            solver.BeginEdit();
+            
+            BeginEdit();
             foreach(var cv in constraints.Zip(values, (c, v) => new {c, v}))
             {                
-                var variable = GetVariableFromViewAndAttribute(cv.c.View, cv.c.Attribute);
-                //variable.ChangeValue(cv.v);
+                var variable = GetVariableFromViewAndAttribute(cv.c.View, cv.c.Attribute);                
                 solver.SuggestValue(variable, cv.v);
             }
-            //solver.Resolve();
-            //solver.AutoSolve = true;
-            //solver.EndEdit();
-            /*
-            foreach (var cv in constraints.Zip(values, (c, v) => new { c, v }))
-            {
-                var variable = GetVariableFromViewAndAttribute(cv.c.View, cv.c.Attribute);
-                solver.AddStay(variable);
-                solver.SetEditedValue(variable, cv.v);
-            } */           
+            EndEdit();
         }
 
+        public void SetEditedValues(IEnumerable<IFluentLayout<T>> constraints)
+        {
+            if (!constraints.Any()) return;
+
+            SetEditConstraints(constraints);
+
+            BeginEdit();
+            foreach (var cv in constraints)
+            {
+                var variable = GetVariableFromViewAndAttribute(cv.View, cv.Attribute);
+                solver.SuggestValue(variable, cv.Constant);
+            }
+            EndEdit();
+        }
+
+       
         public double MeasureHeight(T v)
         {
             var top = GetValue(v, LayoutAttribute.Top);
@@ -184,15 +217,20 @@ namespace FluentLayout.Cassowary
         {
             //var variable = GetCompositeVariableFromViewAndAttribute(view, view, LayoutAttribute.Width);
             var variable = GetVariableFromViewAndAttribute(view, LayoutAttribute.Right);
-            AddEditVar(solver, variable, width);
+            bool editSession = AddEditVar(solver, variable, width);
 
             var height = MeasureHeight(view);            
-            //solver.Solver.EndEdit();
+
+            if(editSession)
+            {
+                EndEdit();
+            }
+            solver.Resolve();
 
             return height;
         }
 
-        void AddEditVar(ClSimplexSolver solver, ClVariable variable, int value)
+        bool AddEditVar(ClSimplexSolver solver, ClVariable variable, int value)
         {
             if (!isStay.ContainsKey(variable.Name))
             {
@@ -200,19 +238,43 @@ namespace FluentLayout.Cassowary
                 variable.ChangeValue(value);
 
                 solver.AddStay(variable);
+                return false;
             } else
             {
+                
                 var status = isStay[variable.Name];
-
                 if(status == 0)
                 { 
                     solver.AddEditVar(variable);
                     isStay[variable.Name] = 1;
                 }
 
-                solver.BeginEdit();
+                BeginEdit();
                 solver.SuggestValue(variable, value);
+                return true;
             }
+        }
+        
+        void BeginEdit()
+        {
+            solver.BeginEdit();
+        }
+        
+        void EndEdit()
+        {
+#if true
+            solver.Resolve();
+#else    
+            solver.EndEdit();
+            
+            foreach(var stay in isStay.Keys.ToArray())
+            {
+                if(isStay[stay] == 1)
+                {
+                    isStay[stay] = 0;
+                }
+            }
+#endif
         }
 
         void AddEditVar(ClSimplexSolver solver, ClVariable variable)
@@ -220,9 +282,17 @@ namespace FluentLayout.Cassowary
             if (!isStay.ContainsKey(variable.Name))
             {
                 isStay.Add(variable.Name, 1);
-
                 solver.AddStay(variable);
-                solver.AddEditVar(variable);
+                solver.AddEditVar(variable, ClStrength.Strong);
+            } else
+            {
+                var status = isStay[variable.Name];
+
+                if (status == 0)
+                {
+                    solver.AddEditVar(variable);
+                    isStay[variable.Name] = 1;
+                }
             }
         }
 
@@ -255,39 +325,50 @@ namespace FluentLayout.Cassowary
 				);
                 
                 var multiplier = fluentLayout.Multiplier != 0 ? fluentLayout.Multiplier : 1;
-				secondExpression = Cl.Plus (
-					Cl.Times (secondExpression, multiplier),
-					new ClLinearExpression (fluentLayout.Constant)
-				);
+                //make sure to construct the least complicated tableau possible by avoiding needless operations
+                if(!Cl.Approx(multiplier, 1)) {                
+				    secondExpression = Cl.Plus (
+					                    Cl.Times (secondExpression, multiplier),
+					                    new ClLinearExpression (fluentLayout.Constant)
+                                    );
+                } else if(!Cl.Approx(fluentLayout.Constant, 0))
+                {
+                    secondExpression = Cl.Plus(
+                                        secondExpression,
+                                        new ClLinearExpression(fluentLayout.Constant)
+                                    );
+                }
 			} else {
 				secondExpression = new ClLinearExpression (fluentLayout.Constant);
 			}
             
 			ClConstraint cn = null;
+            var strength = ClStrength.Strong;
+            var priority = fluentLayout.Priority / 1000;
+
 			switch (fluentLayout.Relation) {
 			case LayoutRelation.Equal:
 				cn = new ClLinearEquation (
 					firstExpression,
-					secondExpression
+					secondExpression, strength, priority
 				);
 				break;
 			case LayoutRelation.GreaterThanOrEqual:
 				cn = new ClLinearInequality (
 					firstExpression,
 					Cl.Operator.GreaterThanOrEqualTo,
-					secondExpression
+					secondExpression, strength, priority
 				);
 				break;
 			case LayoutRelation.LessThanOrEqual:
 				cn = new ClLinearInequality (
 					firstExpression,
 					Cl.Operator.LessThanOrEqualTo,
-					secondExpression
+					secondExpression, strength, priority
 				);
 				break;
 			}
-            cn.Strength = ClStrength.Strong;
-
+            
             constraints.Add(cn);
 			
 			return constraints;
@@ -341,11 +422,13 @@ namespace FluentLayout.Cassowary
                                ClStrength.Required                            
                            ));
 
+                        
                         solver.AddConstraint(new ClLinearInequality(
-                               heightExpression,
+                               heightVariable,
                                Cl.Operator.GreaterThanOrEqualTo,
                                new ClLinearExpression(0)
                            ));
+                        
 
                         AddVariableForViewAndAttribute(view, attribute, heightVariable);
                         return heightVariable;
@@ -427,6 +510,24 @@ namespace FluentLayout.Cassowary
                               Cl.Operator.GreaterThanOrEqualTo,
                               new ClLinearExpression(0)
                           ));
+            }
+
+            
+            if(attribute == LayoutAttribute.Left || attribute == LayoutAttribute.Right)
+            {
+                solver.AddConstraint(new ClLinearInequality(
+                            GetVariableFromViewAndAttribute(view, LayoutAttribute.Right),
+                            Cl.Operator.GreaterThanOrEqualTo,
+                            GetVariableFromViewAndAttribute(view, LayoutAttribute.Left)
+                        ));
+            }
+            if (attribute == LayoutAttribute.Top || attribute == LayoutAttribute.Bottom)
+            {
+                solver.AddConstraint(new ClLinearInequality(
+                            GetVariableFromViewAndAttribute(view, LayoutAttribute.Bottom),
+                            Cl.Operator.GreaterThanOrEqualTo,
+                            GetVariableFromViewAndAttribute(view, LayoutAttribute.Top)
+                        ));
             }
 
             return expression;
