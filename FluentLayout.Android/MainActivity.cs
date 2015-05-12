@@ -32,30 +32,25 @@ namespace FluentLayout.Android
 
 			button.Text = "Button ";
 			button.Id = 1;
+
 			button2.Text = "Button 1";
-			button.Id = 2;
+			button2.Id = 2;
 
 			fluentLayout.AddView (button);
 			fluentLayout.AddView (button2);
 
-			// Set our view from the "main" layout resource
-			SetContentView (fluentLayout);
-
 			fluentLayout.AddConstraints (
-				button.AtTopOf<View.View>(fluentLayout),
-				button.WithSameWidth<View.View>(fluentLayout),
+				button.WithSameTop<View.View>(fluentLayout),
+                button.WithSameLeft<View.View>(fluentLayout),
+				button.WithSameWidth<View.View>(fluentLayout),                
 				button.Height().EqualTo(300),
 				button2.Below(button),
 				button2.WithRelativeWidth(button, 0.5f),
-				button2.WithSameHeight(button)
+                button2.WithRelativeHeight(button, 0.5f),
+                button2.WithSameLeft(button)				
 			);
-			/*
-			SetContentView (Resource.Layout.Main);
-
-			// Get our button from the layout resource,
-			// and attach an event to it
-			Button button = FindViewById<Button> (Resource.Id.myButton);
-			*/
+            SetContentView(fluentLayout);
+			
 			button.Click += delegate {
 				button.Text = string.Format ("{0} clicks!", count++);
 			};

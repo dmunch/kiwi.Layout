@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FluentLayout.Cassowary
+namespace FluentLayout.Cassowary.Tests
 {
 	public class View
 	{

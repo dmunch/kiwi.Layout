@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cassowary;
 using Cirrious.FluentLayouts;
 
-namespace FluentLayout.Cassowary
+namespace FluentLayout.Cassowary.Tests
 {
 	public class ViewEngine : IViewEngine<View>
 	{
@@ -67,19 +67,20 @@ namespace FluentLayout.Cassowary
 
 	public static class ViewExtensions
 	{
-		static FluentEngine<View> fluentEngine = new FluentEngine<View>(new ViewEngine());
+		static FluentEngine<View> fluentEngine /*= new FluentEngine<View>(new ViewEngine())*/;
 
 		public static string AddConstraints<T> (this View view, params IFluentLayout<T>[] fluentLayouts)
 			where T:View
 		{
-			fluentEngine.AddConstraints (view, fluentLayouts);
-			return fluentEngine.Solve (view);
+			//fluentEngine.AddConstraints (view, fluentLayouts);
+			//return fluentEngine.Solve (view);
+            return null;
 		}
 
         public static void UpdateConstraints<T>(this View view, IEnumerable<IFluentLayout<T>> constraints, IEnumerable<double> values)
             where T:View
         {
-            fluentEngine.SetEditedValues(view, constraints, values);
+            //fluentEngine.SetEditedValues(view, constraints, values);
         }
 
         public static void SetValues()

@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{9A95FF02-ED3C-4D94-8194-19C7F0762897}</ProjectGuid>
+    <ProjectGuid>{693BA7DA-A102-4E42-8F26-C9C4B555FD85}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>FluentLayout.Android</RootNamespace>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
