@@ -323,8 +323,8 @@ namespace FluentLayout.Cassowary
 					fluentLayout.SecondItem.View,
 					fluentLayout.SecondItem.Attribute
 				);
-                
-                var multiplier = fluentLayout.Multiplier != 0 ? fluentLayout.Multiplier : 1;
+
+                var multiplier = !Cl.Approx(fluentLayout.Multiplier, 0) ? fluentLayout.Multiplier : 1;
                 //make sure to construct the least complicated tableau possible by avoiding needless operations
                 if(!Cl.Approx(multiplier, 1)) {                
 				    secondExpression = Cl.Plus (
