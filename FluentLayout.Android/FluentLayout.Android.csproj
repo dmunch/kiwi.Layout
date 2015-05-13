@@ -4,7 +4,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{693BA7DA-A102-4E42-8F26-C9C4B555FD85}</ProjectGuid>
+    <ProjectGuid>{9A95FF02-ED3C-4D94-8194-19C7F0762897}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>FluentLayout.Android</RootNamespace>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
@@ -38,12 +38,8 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cassowary.Pcl, Version=1.0.5596.23648, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Cassowary.Pcl.1.0.0-CI00002\lib\portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1\Cassowary.Pcl.dll</HintPath>
-    </Reference>
     <Reference Include="Cirrious.FluentLayout">
-      <HintPath>..\packages\Cirrious.FluentLayout.1.0.0-CI00000\lib\portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1\Cirrious.FluentLayout.dll</HintPath>
+      <HintPath>..\..\packages\Cirrious.FluentLayout.1.0.0-CI00000\lib\portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1\Cirrious.FluentLayout.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />

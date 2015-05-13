@@ -47,12 +47,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cassowary.Pcl, Version=1.0.5596.23648, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Cassowary.Pcl.1.0.0-CI00002\lib\portable-net45+win+wp80\Cassowary.Pcl.dll</HintPath>
+    <Reference Include="Cassowary.Pcl">
+      <HintPath>..\..\packages\Cassowary.Pcl.1.0.0-CI00002\lib\portable-net45+win+wp80\Cassowary.Pcl.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.FluentLayout">
-      <HintPath>..\packages\Cirrious.FluentLayout.1.0.0-CI00000\lib\portable-net45+win+wp80\Cirrious.FluentLayout.dll</HintPath>
+      <HintPath>..\..\packages\Cirrious.FluentLayout.1.0.0-CI00000\lib\portable-net45+win+wp80\Cirrious.FluentLayout.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
