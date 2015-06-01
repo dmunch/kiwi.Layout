@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>0.1.0</version>
+    <version>2.0.1</version>
     <title>Cirrious.FluentLayouts</title>
     <authors>Stuart Lodge, Alexay Bogdanov, Daniel Münch</authors>
     <owners>Daniel Münch</owners>
