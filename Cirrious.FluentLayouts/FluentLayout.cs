@@ -25,6 +25,7 @@ namespace Cirrious.FluentLayouts
 			this.Attribute = attribute;
 			this.Relation = relation;
 			this.Constant = constant;
+			this.Multiplier = 1;
 			this.Priority = 1000;
 		}
 
