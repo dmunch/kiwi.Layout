@@ -7,7 +7,7 @@ using Cirrious.FluentLayouts;
 
 namespace FluentLayout.Cassowary
 {
-	class ViewAndLayoutEqualityComparer<T> : IEqualityComparer<ViewAndLayoutAttribute<T>>
+	public class ViewAndLayoutEqualityComparer<T> : IEqualityComparer<ViewAndLayoutAttribute<T>>
 	{
 		protected IViewEngine<T> viewEngine;
 		public ViewAndLayoutEqualityComparer(IViewEngine<T> viewEngine)

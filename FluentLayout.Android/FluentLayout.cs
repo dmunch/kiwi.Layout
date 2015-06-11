@@ -14,27 +14,21 @@ namespace FluentLayout.Android
 {
 	public class FluentLayout : ViewGroup
 	{
-		protected FluentEngine<View.View> fluentEngine;
-        protected Dictionary<View.View, IFluentLayout<View.View>> _heightConstraints = new Dictionary<View.View, IFluentLayout<View.View>>();
-
+		protected FluentEngineKiwi<View.View> fluentEngine;
+        
         protected List<View.View> ChildViews { get; set; }
 
 		public FluentLayout(Context context)
 			:base(context)
 		{
             ChildViews = new List<View.View>();
-            fluentEngine = new FluentEngine<View.View>(this, new AndroidViewEngine());
+            fluentEngine = new FluentEngineKiwi<View.View>(this, new AndroidViewEngine());
 		}
 
         bool measured = false;
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
-
-            var widthSpec = MeasureSpec.GetMode(widthMeasureSpec);
-            var heightSpec = MeasureSpec.GetMode(heightMeasureSpec);
-
             var parentWidth = MeasureSpec.GetSize(widthMeasureSpec);
-            var parentHeight = MeasureSpec.GetSize(heightMeasureSpec);
 
             if (measured)
             {
@@ -44,36 +38,48 @@ namespace FluentLayout.Android
                 
             measured = true;
             
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
+            //var sw = new System.Diagnostics.Stopwatch();
+            //sw.Start();
 
             fluentEngine.MeasureHeight(this, parentWidth);
+
+			//var measureFirstStep = sw.Elapsed; sw.Restart ();
+
             MeasureChildViews();
             
-            var height = (int)fluentEngine.MeasureHeight(this);
+			//var measureSecondStep = sw.Elapsed; sw.Restart ();
+
+			var height = (int)fluentEngine.MeasureHeight(this);
             this.SetMeasuredDimension(parentWidth, height);
 
-            sw.Stop();
-            System.Diagnostics.Debug.WriteLine("OnMeasure elapsed time {0}", sw.ElapsedMilliseconds);
+            //sw.Stop();
+			//System.Diagnostics.Debug.WriteLine("OnMeasure elapsed time first step {0}, second step {1}, SetMeasuredDimensions {2}", measureFirstStep.TotalMilliseconds, measureSecondStep.TotalMilliseconds, sw.Elapsed.TotalMilliseconds);
         }
 
-        protected float MeasureHeight(View.View tv)
-        {
-            var width = (int)fluentEngine.MeasuredWidth(tv);
+		protected void MeasureChildViews()
+		{
+			//measure height for each text view after first layout cycle, once we know their widths
 
-            var widthSpec = MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly);
-            var heightSpec = MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
-            tv.Measure(widthSpec, heightSpec);
-            
-            return tv.MeasuredHeight;
-        }
+			var editConstraints = ChildViews.OfType<TextView>().Select (tv => tv.Height ().GreaterThanOrEqualTo (MeasureHeight (tv)));
+			fluentEngine.SetEditedValues(editConstraints);
+		}
+
+		protected float MeasureHeight(View.View tv)
+		{
+			var width = (int)fluentEngine.MeasuredWidth(tv);
+
+			var widthSpec = MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly);
+			var heightSpec = MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+			tv.Measure(widthSpec, heightSpec);
+
+			return tv.MeasuredHeight;
+		}
 
 		protected override void OnLayout (bool changed, int l, int t, int r, int b)
 		{
             if (!changed) return;
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
 
+			fluentEngine.UpdateVariables();
             foreach(var child in ChildViews)
             {
                 int vl = (int)fluentEngine.GetValue(child, LayoutAttribute.Left);
@@ -83,26 +89,13 @@ namespace FluentLayout.Android
                 
                 child.Layout(vl, vt, vr, vb);
             }
-            sw.Stop();
-            System.Diagnostics.Debug.WriteLine("OnLayout elapsed time {0}", sw.ElapsedMilliseconds);
 		}
-
-        protected void MeasureChildViews()
-        {
-            //measure height for each text view after first layout cycle, once we know their widths
-            
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();            
-            fluentEngine.SetEditedValues(ChildViews/*.OfType<TextView>()*/.Except(_heightConstraints.Keys).Select(tv => tv.Height().GreaterThanOrEqualTo(MeasureHeight(tv))));
-            sw.Stop();
-
-            System.Diagnostics.Debug.WriteLine("MeasureChildViews:Constraints elapsed time {0}", sw.ElapsedMilliseconds);
-        }
 
         public override void AddView(View.View v)
         {
             base.AddView(v);
-            fluentEngine.AddConstraint(v.Height().GreaterThanOrEqualTo(0));
+
+			fluentEngine.AddView (v);
         }
 
 		public void AddConstraints(params IFluentLayout<View.View>[] fluentLayouts)
@@ -118,7 +111,6 @@ namespace FluentLayout.Android
             }
             this.ChildViews.Clear();
 
-            this._heightConstraints.Clear();
             this.fluentEngine.RemoveAllConstraints();
         }
 	}
