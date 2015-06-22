@@ -25,19 +25,10 @@ namespace FluentLayout.Android
             fluentEngine = new FluentEngineKiwi<View.View>(this, new AndroidViewEngine());
 		}
 
-        bool measured = false;
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
             var parentWidth = MeasureSpec.GetSize(widthMeasureSpec);
 
-            if (measured)
-            {
-                this.SetMeasuredDimension(parentWidth, (int)fluentEngine.MeasureHeight(this));
-                return;
-            }
-                
-            measured = true;
-            
             //var sw = new System.Diagnostics.Stopwatch();
             //sw.Start();
 
@@ -49,8 +40,8 @@ namespace FluentLayout.Android
             
 			//var measureSecondStep = sw.Elapsed; sw.Restart ();
 
-			var height = (int)fluentEngine.MeasureHeight(this);
-            this.SetMeasuredDimension(parentWidth, height);
+
+			this.SetMeasuredDimension(parentWidth, (int)fluentEngine.MeasureHeight(this));
 
             //sw.Stop();
 			//System.Diagnostics.Debug.WriteLine("OnMeasure elapsed time first step {0}, second step {1}, SetMeasuredDimensions {2}", measureFirstStep.TotalMilliseconds, measureSecondStep.TotalMilliseconds, sw.Elapsed.TotalMilliseconds);
