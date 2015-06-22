@@ -32,6 +32,8 @@ namespace FluentLayout.Android
 
             _rootView = rootView;
             Init();
+
+			this.AddRootView (rootView);
 		}
 
         protected void Init()
@@ -213,9 +215,42 @@ namespace FluentLayout.Android
 			var left = GetVariableFromViewAndAttribute (view, LayoutAttribute.Left);
 			var right = GetVariableFromViewAndAttribute (view, LayoutAttribute.Right);
 
+			//top > 0
 			solver.addConstraint(new Constraint(new Expression(new Term(top)), RelationalOperator.OP_GE, kiwi.kiwi.required));
+			//left > 0
 			solver.addConstraint(new Constraint(new Expression(new Term(left)), RelationalOperator.OP_GE, kiwi.kiwi.required));
+			//bottom > zero
 			solver.addConstraint(new Constraint(kiwi.kiwi.__minus__(bottom, top), RelationalOperator.OP_GE, kiwi.kiwi.required));
+			//right > left
+			solver.addConstraint(new Constraint(kiwi.kiwi.__minus__(right, left), RelationalOperator.OP_GE, kiwi.kiwi.required));
+
+			//setup composit constraints
+			var width = GetCompositeVariableFromViewAndAttribute (view, LayoutAttribute.Width, left, right, top, bottom);
+			var height = GetCompositeVariableFromViewAndAttribute (view, LayoutAttribute.Height, left, right, top, bottom);
+			solver.addConstraint(new Constraint(new Expression(new Term(width)), RelationalOperator.OP_GE, kiwi.kiwi.required));
+			solver.addConstraint(new Constraint(new Expression(new Term(height)), RelationalOperator.OP_GE, kiwi.kiwi.required));
+
+			var centerX = GetCompositeVariableFromViewAndAttribute (view, LayoutAttribute.CenterX, left, right, top, bottom);
+			var centerY = GetCompositeVariableFromViewAndAttribute (view, LayoutAttribute.CenterY, left, right, top, bottom);
+			solver.addConstraint(new Constraint(new Expression(new Term(centerX)), RelationalOperator.OP_GE, kiwi.kiwi.required));
+			solver.addConstraint(new Constraint(new Expression(new Term(centerY)), RelationalOperator.OP_GE, kiwi.kiwi.required));
+		}
+		public void AddRootView(T view)
+		{
+			//setup common constraints
+			var top = GetVariableFromViewAndAttribute (view, LayoutAttribute.Top);
+			var bottom = GetVariableFromViewAndAttribute (view, LayoutAttribute.Bottom);
+
+			var left = GetVariableFromViewAndAttribute (view, LayoutAttribute.Left);
+			var right = GetVariableFromViewAndAttribute (view, LayoutAttribute.Right);
+
+			//top == 0
+			solver.addConstraint(new Constraint(new Expression(new Term(top)), RelationalOperator.OP_EQ, kiwi.kiwi.required));
+			//left == 0
+			solver.addConstraint(new Constraint(new Expression(new Term(left)), RelationalOperator.OP_EQ, kiwi.kiwi.required));
+			//bottom > zero
+			solver.addConstraint(new Constraint(kiwi.kiwi.__minus__(bottom, top), RelationalOperator.OP_GE, kiwi.kiwi.required));
+			//right > left
 			solver.addConstraint(new Constraint(kiwi.kiwi.__minus__(right, left), RelationalOperator.OP_GE, kiwi.kiwi.required));
 
 			//setup composit constraints
