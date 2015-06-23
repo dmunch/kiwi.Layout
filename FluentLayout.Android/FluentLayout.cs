@@ -16,12 +16,18 @@ namespace FluentLayout.Android
 	{
 		protected FluentEngineKiwi<View.View> fluentEngine;
         
-        protected List<View.View> ChildViews { get; set; }
+        protected IEnumerable<View.View> ChildViews { 
+			get
+			{
+				for (int c = 0; c < this.ChildCount; c++) {
+					yield return this.GetChildAt (c);
+				}
+			}
+		}
 
 		public FluentLayout(Context context)
 			:base(context)
 		{
-            ChildViews = new List<View.View>();
             fluentEngine = new FluentEngineKiwi<View.View>(this, new AndroidViewEngine());
 		}
 
@@ -71,7 +77,8 @@ namespace FluentLayout.Android
             if (!changed) return;
 
 			fluentEngine.UpdateVariables();
-            foreach(var child in ChildViews)
+
+			foreach(var child in ChildViews)
             {
                 int vl = (int)fluentEngine.GetValue(child, LayoutAttribute.Left);
                 int vr = (int)fluentEngine.GetValue(child, LayoutAttribute.Right);
@@ -96,12 +103,12 @@ namespace FluentLayout.Android
 
         public void RemoveAllConstraints()
         {
-            foreach(var cv in ChildViews)
+			foreach(var cv in ChildViews.ToList())
             {
+				this.RemoveView (cv);
                 cv.Dispose();
             }
-            this.ChildViews.Clear();
-
+            
             this.fluentEngine.RemoveAllConstraints();
         }
 	}
