@@ -46,8 +46,7 @@ namespace FluentLayout.Android
             
 			//var measureSecondStep = sw.Elapsed; sw.Restart ();
 
-
-			this.SetMeasuredDimension(parentWidth, (int)fluentEngine.MeasureHeight(this));
+			this.SetMeasuredDimension(parentWidth, (int)fluentEngine.MeasureHeight(this, parentWidth));
 
             //sw.Stop();
 			//System.Diagnostics.Debug.WriteLine("OnMeasure elapsed time first step {0}, second step {1}, SetMeasuredDimensions {2}", measureFirstStep.TotalMilliseconds, measureSecondStep.TotalMilliseconds, sw.Elapsed.TotalMilliseconds);
@@ -63,6 +62,9 @@ namespace FluentLayout.Android
 
 		protected float MeasureHeight(View.View tv)
 		{
+			if (tv.Visibility == ViewStates.Gone)
+				return 0;
+			
 			var width = (int)fluentEngine.MeasuredWidth(tv);
 
 			var widthSpec = MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly);
