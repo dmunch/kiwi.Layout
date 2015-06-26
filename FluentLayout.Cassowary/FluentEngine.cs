@@ -9,23 +9,23 @@ namespace FluentLayout.Cassowary
 {
 	public class ViewAndLayoutEqualityComparer<T> : IEqualityComparer<ViewAndLayoutAttribute<T>>
 	{
-		protected IViewEngine<T> viewEngine;
-		public ViewAndLayoutEqualityComparer(IViewEngine<T> viewEngine)
-		{
-			this.viewEngine = viewEngine;
-		}
-
 		#region IEqualityComparer implementation
 
 		public bool Equals (ViewAndLayoutAttribute<T> x, ViewAndLayoutAttribute<T> y)
 		{
-			return viewEngine.GetViewName(x.View) == viewEngine.GetViewName(y.View) && x.Attribute == y.Attribute;
+			return x.View.GetHashCode() == y.View.GetHashCode() && x.Attribute == y.Attribute;
 		}
 
 		public int GetHashCode (ViewAndLayoutAttribute<T> obj)
 		{
-			var hc = string.Format("{0}-{1}", viewEngine.GetViewName(obj.View), obj.Attribute);
-			return hc.GetHashCode ();
+			unchecked {
+				int hash = 17;
+
+				hash = hash * 31 + obj.View.GetHashCode ();
+				hash = hash * 31 + obj.Attribute.GetHashCode ();
+
+				return hash;
+			}
 		}
 		#endregion
 	}
@@ -64,7 +64,7 @@ namespace FluentLayout.Cassowary
 
             _constraints = new List<IFluentLayout<T>>();
 			variables = new Dictionary<ViewAndLayoutAttribute<T>, ClVariable>(
-					new ViewAndLayoutEqualityComparer<T>(viewEngine)
+					new ViewAndLayoutEqualityComparer<T>()
 				);
 
             _rootView = rootView;
