@@ -8,60 +8,35 @@ using FluentLayout.Cassowary;
 
 namespace FluentLayout.Android
 {
-	public class FluentEngineKiwi<T>
+	public sealed class FluentEngineKiwi<T> : IDisposable
 	{
-        T _rootView;
-        protected Solver solver;
+		protected Solver solver = new Solver();
 		
-        protected Dictionary<ViewAndLayoutAttribute<T>,Variable> variables;
-        Dictionary<string, byte> isStay = new Dictionary<string, byte>();
-
-
-        protected List<IFluentLayout<T>> _constraints;
-		protected Dictionary<LayoutAttribute, Variable> _stayVariables = new Dictionary<LayoutAttribute,Variable>();
-
+		protected Dictionary<ViewAndLayoutAttribute<T>,Variable> variables = new Dictionary<ViewAndLayoutAttribute<T>, Variable>(
+				new ViewAndLayoutEqualityComparer<T>()
+			);
+        
+		protected List<IFluentLayout<T>> _constraints = new List<IFluentLayout<T>>();
 		protected IViewEngine<T> viewEngine;
+
 		public FluentEngineKiwi (T rootView, IViewEngine<T> viewEngine)
 		{
 			this.viewEngine = viewEngine;
-
-            _constraints = new List<IFluentLayout<T>>();
-			variables = new Dictionary<ViewAndLayoutAttribute<T>, Variable>(
-					new ViewAndLayoutEqualityComparer<T>(viewEngine)
-				);
-
-            _rootView = rootView;
-            Init();
-
+            
 			this.AddRootView (rootView);
 		}
-
-        protected void Init()
-        {
-            solver = new Solver();
-            
-            var stayVariables = new LayoutAttribute[] {
-				    LayoutAttribute.Left,				    
-				    LayoutAttribute.Top
-			    };
-
-            foreach (var attribute in stayVariables)
-            {
-                var variable = GetVariableFromViewAndAttribute(_rootView, attribute);
-				variable.setValue (0);
-
-                _stayVariables.Add(attribute, variable);
-                //solver.AddStay(variable);
-            }
-        }
-
+			
         public void RemoveAllConstraints()
         {
             _constraints.Clear();
-            isStay.Clear();
+
+			foreach (var variable in variables.Values) {
+				variable.Dispose ();
+			}
+
             variables.Clear();
-            _stayVariables.Clear();
-            Init();
+
+			solver.reset ();
         }
 
 		public void AddConstraints (IEnumerable<IFluentLayout<T>> fluentLayouts)
@@ -212,7 +187,7 @@ namespace FluentLayout.Android
 			AddView (view, RelationalOperator.OP_GE);
 		}
 
-		public void AddRootView(T view)
+		protected void AddRootView(T view)
 		{
 			//for the root view, left and right position are equal zero
 			AddView (view, RelationalOperator.OP_EQ);
@@ -355,6 +330,18 @@ namespace FluentLayout.Android
             var viewAndAttribute = new ViewAndLayoutAttribute<T> (view, attribute);
             variables.Add(viewAndAttribute, variable);
         }
+
+		public void Dispose()
+		{
+			//TODO dispose all the intermediate objects created by kiwi.__minus__() for example
+			_constraints.Clear();
+
+			foreach (var variable in variables.Values) {
+				variable.Dispose ();
+			}
+
+			variables.Clear();
+			solver.Dispose ();
+		}
 	}
 }
-
