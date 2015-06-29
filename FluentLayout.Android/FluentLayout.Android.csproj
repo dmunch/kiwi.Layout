@@ -55,6 +55,7 @@
     <Compile Include="AndroidViewEngine.cs" />
     <Compile Include="FluentLayout.cs" />
     <Compile Include="FluentEngineKiwi.cs" />
+    <Compile Include="ViewAndLayoutEqualityComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -67,12 +68,6 @@
     <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\FluentLayout.Cassowary\FluentLayout.Cassowary.csproj">
-      <Project>{72BC634F-ABA5-4735-9B9E-A6701056258F}</Project>
-      <Name>FluentLayout.Cassowary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
   </ItemGroup>

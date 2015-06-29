@@ -3,7 +3,6 @@ using Android.Content;
 using Android.Views;
 
 using Cirrious.FluentLayouts;
-using FluentLayout.Cassowary;
 using View = Android.Views;
 
 using System.Linq;

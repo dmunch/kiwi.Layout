@@ -1,11 +1,17 @@
 ﻿using System;
 
-using FluentLayout.Cassowary;
 using View = Android.Views;
 using Cirrious.FluentLayouts;
 
 namespace FluentLayout.Android
 {
+    public interface IViewEngine<T>
+    {
+        string GetViewName (T view);
+        float GetAttribute (T view, LayoutAttribute attribute);
+        void SetAttribute (T view, LayoutAttribute attribute, float value);
+    }
+
 	public class AndroidViewEngine : IViewEngine<View.View>
 	{
 		#region IViewEngine implementation

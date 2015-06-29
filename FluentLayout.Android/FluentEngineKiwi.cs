@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-
-using kiwi;
 using Cirrious.FluentLayouts;
-using FluentLayout.Cassowary;
+using kiwi;
 
 namespace FluentLayout.Android
 {
