@@ -55,7 +55,30 @@ namespace FluentLayout.Android
 		{
 			//measure height for each text view after first layout cycle, once we know their widths
 
-			var editConstraints = ChildViews.OfType<TextView>().Select (tv => tv.Height ().GreaterThanOrEqualTo (MeasureHeight (tv)));
+            var childViewsWithHorizontalContentHugging = ChildViews
+                                                            .OfType<TextView>()
+                                                            .Where(cv => cv.Tag != null)
+                                                            .ToArray();
+
+            var editConstraints = ChildViews.Except(childViewsWithHorizontalContentHugging)
+                                            .OfType<TextView>()
+                                            .Select (tv => tv.Height ().GreaterThanOrEqualTo (MeasureHeight (tv)))
+                                            .ToList();
+            
+            foreach (var childView in childViewsWithHorizontalContentHugging)
+            {
+                if (childView.Visibility == ViewStates.Gone)
+                    continue;
+
+                var widthSpec = MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                var heightSpec = MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
+                childView.Measure(widthSpec, heightSpec);
+
+                editConstraints.Add(childView.Width().EqualTo(childView.MeasuredWidth).SetPriority((int)childView.Tag));
+                editConstraints.Add(childView.Height().EqualTo(childView.MeasuredHeight));
+            }
+
+
 			fluentEngine.SetEditedValues(editConstraints);
 		}
 
