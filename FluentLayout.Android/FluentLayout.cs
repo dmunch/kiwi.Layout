@@ -36,7 +36,7 @@ namespace FluentLayout.Android
 
             //var sw = new System.Diagnostics.Stopwatch();
             //sw.Start();
-
+            fluentEngine.SetGoneViews(ChildViews.Where(v => v.Visibility == ViewStates.Gone));
             fluentEngine.MeasureHeight(this, parentWidth);
 
 			//var measureFirstStep = sw.Elapsed; sw.Restart ();
@@ -57,11 +57,13 @@ namespace FluentLayout.Android
 
             var childViewsWithHorizontalContentHugging = ChildViews
                                                             .OfType<TextView>()
+                                                            .Where(tv => tv.Visibility != ViewStates.Gone)
                                                             .Where(cv => cv.Tag != null)
                                                             .ToArray();
 
             var editConstraints = ChildViews.Except(childViewsWithHorizontalContentHugging)
                                             .OfType<TextView>()
+                                            .Where(tv => tv.Visibility != ViewStates.Gone)
                                             .Select (tv => tv.Height ().GreaterThanOrEqualTo (MeasureHeight (tv)))
                                             .ToList();
             

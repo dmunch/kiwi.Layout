@@ -59,6 +59,51 @@ namespace FluentLayout.Android
 			solver.suggestValue(variable, (float)value);
 		}
 
+        List<Constraint> goneConstraints = new List<Constraint>();
+        public void SetGoneViews(IEnumerable<T> views)
+        {
+            /*
+            foreach (var ev in editVariables)
+            {
+                solver.removeEditVariable(ev);
+            }
+            editVariables.Clear();
+            */
+
+            foreach (var goneConstraint in goneConstraints)
+            {
+                solver.removeConstraint(goneConstraint);
+            }
+            goneConstraints.Clear();
+
+            foreach (var v in views)
+            {
+                //var width = GetVariableFromViewAndAttribute(v, LayoutAttribute.Width);
+                //var height = GetVariableFromViewAndAttribute(v, LayoutAttribute.Height);
+
+                //SuggestValue(width, 1,  kiwi.kiwi.create(3.0, 0, 0));
+                //SuggestValue(height, 1, kiwi.kiwi.create(3.0, 0, 0));
+
+                //editVariables.Add(width);
+                //editVariables.Add(height);
+
+                var left = GetVariableFromViewAndAttribute(v, LayoutAttribute.Left);
+                var right = GetVariableFromViewAndAttribute(v, LayoutAttribute.Right);
+                var top = GetVariableFromViewAndAttribute(v, LayoutAttribute.Top);
+                var bottom = GetVariableFromViewAndAttribute(v, LayoutAttribute.Bottom);
+
+                var c1 = new Constraint(kiwi.kiwi.__minus__(left, right), RelationalOperator.OP_EQ, kiwi.kiwi.required);
+                var c2 = new Constraint(kiwi.kiwi.__minus__(top, bottom), RelationalOperator.OP_EQ, kiwi.kiwi.required);
+
+                solver.addConstraint(c1);
+                solver.addConstraint(c2);
+
+                goneConstraints.Add(c1);
+                goneConstraints.Add(c2);
+            }
+            solver.updateVariables ();
+        }
+            
         public void SetEditedValues(IEnumerable<IFluentLayout<T>> constraints, IEnumerable<double> values)
         {
             if (!constraints.Any()) return;
