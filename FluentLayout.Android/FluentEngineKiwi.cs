@@ -51,6 +51,27 @@ namespace FluentLayout.Android
 			solver.addConstraint (GetConstraintFromFluentLayout (constraint));
         }
 
+		T rootView;
+		Constraint rootLeftConstraint;
+		Constraint rootTopConstraint;
+
+		public int PaddingLeft { get; protected set; }
+		public int PaddingRight { get; protected  set; }
+		public int PaddingTop { get; protected set; }
+		public int PaddingBottom { get; protected set; }
+
+		public void SetPadding(int left, int top, int right, int bottom)
+		{
+			if (left != PaddingLeft || top != PaddingTop)
+			{
+				SetRootLeftTopPadding(left, top);
+			}
+			PaddingLeft = left;
+			PaddingTop = top;
+			PaddingRight = right;
+			PaddingBottom = bottom;
+		}
+
 		void SuggestValue(Variable variable, double value)
 		{
 			if (!solver.hasEditVariable (variable)) {
@@ -148,11 +169,11 @@ namespace FluentLayout.Android
         {
 			var variable = GetVariableFromViewAndAttribute(view, LayoutAttribute.Right);
 
-			SuggestValue (variable, width);
+			SuggestValue (variable, width + PaddingLeft - PaddingRight);
 			solver.updateVariables ();
             var height = MeasureHeight(view);            
 
-            return height;
+			return height + PaddingTop + PaddingBottom;
         }
 
 		public void UpdateVariables()
@@ -227,16 +248,52 @@ namespace FluentLayout.Android
 		public void AddView(T view)
 		{
 			//for "normal" child views left and right position are greater then zero
-			AddView (view, RelationalOperator.OP_GE);
+
+			var top = GetVariableFromViewAndAttribute (view, LayoutAttribute.Top);
+			var left = GetVariableFromViewAndAttribute (view, LayoutAttribute.Left);
+
+			//for the root view, left and right position are equal zero
+			//top == 0
+			solver.addConstraint(new Constraint(new Expression(new Term(top)), RelationalOperator.OP_GE, kiwi.kiwi.required));
+			//left == 0
+			solver.addConstraint(new Constraint(new Expression(new Term(left)), RelationalOperator.OP_GE, kiwi.kiwi.required));
+
+			AddViewConstraints (view);
 		}
 
 		protected void AddRootView(T view)
 		{
-			//for the root view, left and right position are equal zero
-			AddView (view, RelationalOperator.OP_EQ);
+			rootView = view;
+			SetRootLeftTopPadding (PaddingLeft, PaddingTop);
+			AddViewConstraints (view);
 		}
 
-		protected void AddView(T view, RelationalOperator topLeftOperator)
+		protected void SetRootLeftTopPadding(int leftPadding, int topPadding)
+		{
+			var top = GetVariableFromViewAndAttribute (rootView, LayoutAttribute.Top);
+			var left = GetVariableFromViewAndAttribute (rootView, LayoutAttribute.Left);
+
+			if (rootTopConstraint != null) 
+			{
+				solver.removeConstraint (rootTopConstraint);
+				rootTopConstraint.Dispose();
+			}
+			if (rootLeftConstraint != null) 
+			{
+				solver.removeConstraint (rootLeftConstraint);
+				rootLeftConstraint.Dispose();
+			}
+
+			//for the root view, left and right position are equal zero
+			//top == 0
+			rootTopConstraint = new Constraint(kiwi.kiwi.__minus__(top, new Expression(topPadding)), RelationalOperator.OP_EQ, kiwi.kiwi.required);
+			solver.addConstraint(rootTopConstraint);
+			//left == 0
+			rootLeftConstraint = new Constraint(kiwi.kiwi.__minus__(left, new Expression(leftPadding)), RelationalOperator.OP_EQ, kiwi.kiwi.required);
+			solver.addConstraint(rootLeftConstraint);
+		}
+
+		protected void AddViewConstraints(T view)
 		{
 			//setup common constraints
 			var top = GetVariableFromViewAndAttribute (view, LayoutAttribute.Top);
@@ -245,10 +302,6 @@ namespace FluentLayout.Android
 			var left = GetVariableFromViewAndAttribute (view, LayoutAttribute.Left);
 			var right = GetVariableFromViewAndAttribute (view, LayoutAttribute.Right);
 
-			//top == 0
-			solver.addConstraint(new Constraint(new Expression(new Term(top)), topLeftOperator, kiwi.kiwi.required));
-			//left == 0
-			solver.addConstraint(new Constraint(new Expression(new Term(left)), topLeftOperator, kiwi.kiwi.required));
 			//bottom > zero
 			solver.addConstraint(new Constraint(kiwi.kiwi.__minus__(bottom, top), RelationalOperator.OP_GE, kiwi.kiwi.required));
 			//right > left

@@ -30,9 +30,15 @@ namespace FluentLayout.Android
             fluentEngine = new FluentEngineKiwi<View.View>(this, new AndroidViewEngine());
 		}
 
+		public override void SetPadding(int left, int top, int right, int bottom)
+		{
+			base.SetPadding(left, top, right, bottom);
+			fluentEngine.SetPadding(PaddingLeft, PaddingTop, PaddingRight, PaddingBottom);
+		}
+
         protected override void OnMeasure(int widthMeasureSpec, int heightMeasureSpec)
         {
-            var parentWidth = MeasureSpec.GetSize(widthMeasureSpec);
+			var parentWidth = MeasureSpec.GetSize(widthMeasureSpec);
 
             //var sw = new System.Diagnostics.Stopwatch();
             //sw.Start();
