@@ -24,6 +24,30 @@ namespace FluentLayout.Android
 			}
 		}
 
+        /// <summary>
+        /// ChildViews of type TextView and all subtypes, without Buttons
+        /// </summary>
+        /// <value>The text views.</value>
+        protected IEnumerable<TextView> TextViews
+        {
+            get
+            { 
+                return ChildViews.OfType<TextView>().Where(v => !(v is Button));
+            }
+        }
+
+        /// <summary>
+        /// ChildViews of real type TextView.
+        /// </summary>
+        /// <value>The text views.</value>
+        protected IEnumerable<TextView> RealTextViews
+        {
+            get
+            { 
+                return ChildViews.OfType<TextView>().Where(v => v.GetType() == typeof(TextView));
+            }
+        }
+
 		public FluentLayout(Context context)
 			:base(context)
 		{
@@ -42,7 +66,10 @@ namespace FluentLayout.Android
 
             //var sw = new System.Diagnostics.Stopwatch();
             //sw.Start();
-            fluentEngine.SetGoneViews(ChildViews.Where(v => v.Visibility == ViewStates.Gone));
+            var goneViews = ChildViews.Where(v => v.Visibility == ViewStates.Gone);
+            var textFieldsWithNoText = RealTextViews.Where(tv => string.IsNullOrEmpty(tv.Text));
+
+            fluentEngine.SetGoneViews(goneViews.Union(textFieldsWithNoText));
             fluentEngine.MeasureHeight(this, parentWidth);
 
 			//var measureFirstStep = sw.Elapsed; sw.Restart ();
@@ -61,14 +88,12 @@ namespace FluentLayout.Android
 		{
 			//measure height for each text view after first layout cycle, once we know their widths
 
-            var childViewsWithHorizontalContentHugging = ChildViews
-                                                            .OfType<TextView>()
+            var childViewsWithHorizontalContentHugging = TextViews
                                                             .Where(tv => tv.Visibility != ViewStates.Gone)
                                                             .Where(cv => cv.Tag != null)
                                                             .ToArray();
 
-            var editConstraints = ChildViews.Except(childViewsWithHorizontalContentHugging)
-                                            .OfType<TextView>()
+            var editConstraints = TextViews.Except(childViewsWithHorizontalContentHugging)
                                             .Where(tv => tv.Visibility != ViewStates.Gone)
                                             .Select (tv => tv.Height ().GreaterThanOrEqualTo (MeasureHeight (tv)))
                                             .ToList();
@@ -95,7 +120,7 @@ namespace FluentLayout.Android
 			if (tv.Visibility == ViewStates.Gone)
 				return 0;
 			
-			var width = (int)fluentEngine.MeasuredWidth(tv);
+            var width = (int)fluentEngine.MeasuredWidth(tv) - PaddingLeft - PaddingRight;
 
 			var widthSpec = MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly);
 			var heightSpec = MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified);
