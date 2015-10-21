@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kiwi.Layout.iOS", "kiwi.Layout.iOS\kiwi.Layout.iOS.csproj", "{274C731D-F804-435B-9939-064F778DEAC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kiwi.Layout", "kiwi.Layout\kiwi.Layout.csproj", "{B3BCE0B6-983F-4536-8350-FD9EE8EBE8AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kiwi.Layout.Droid", "kiwi.Layout.Droid\kiwi.Layout.Droid.csproj", "{452949A0-B0C5-40ED-8206-BDD2E6F71902}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kiwi.Layout.Fluent", "kiwi.Layout.Fluent\kiwi.Layout.Fluent.csproj", "{FCBC3C90-260F-4509-BFD4-BDE7EEB3C918}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kiwi.Layout.Tests", "kiwi.Layout.Tests\kiwi.Layout.Tests.csproj", "{4FD5708E-5E3C-4F5D-86D8-DEEEF83487BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|Any CPU = Release|Any CPU
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{274C731D-F804-435B-9939-064F778DEAC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{274C731D-F804-435B-9939-064F778DEAC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{274C731D-F804-435B-9939-064F778DEAC3}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{274C731D-F804-435B-9939-064F778DEAC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{274C731D-F804-435B-9939-064F778DEAC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{274C731D-F804-435B-9939-064F778DEAC3}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{B3BCE0B6-983F-4536-8350-FD9EE8EBE8AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3BCE0B6-983F-4536-8350-FD9EE8EBE8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3BCE0B6-983F-4536-8350-FD9EE8EBE8AD}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{B3BCE0B6-983F-4536-8350-FD9EE8EBE8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3BCE0B6-983F-4536-8350-FD9EE8EBE8AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3BCE0B6-983F-4536-8350-FD9EE8EBE8AD}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{452949A0-B0C5-40ED-8206-BDD2E6F71902}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{452949A0-B0C5-40ED-8206-BDD2E6F71902}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{452949A0-B0C5-40ED-8206-BDD2E6F71902}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{452949A0-B0C5-40ED-8206-BDD2E6F71902}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{452949A0-B0C5-40ED-8206-BDD2E6F71902}.Release|Any CPU.Build.0 = Release|Any CPU
+		{452949A0-B0C5-40ED-8206-BDD2E6F71902}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{FCBC3C90-260F-4509-BFD4-BDE7EEB3C918}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCBC3C90-260F-4509-BFD4-BDE7EEB3C918}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCBC3C90-260F-4509-BFD4-BDE7EEB3C918}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{FCBC3C90-260F-4509-BFD4-BDE7EEB3C918}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCBC3C90-260F-4509-BFD4-BDE7EEB3C918}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCBC3C90-260F-4509-BFD4-BDE7EEB3C918}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{4FD5708E-5E3C-4F5D-86D8-DEEEF83487BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FD5708E-5E3C-4F5D-86D8-DEEEF83487BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FD5708E-5E3C-4F5D-86D8-DEEEF83487BC}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{4FD5708E-5E3C-4F5D-86D8-DEEEF83487BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FD5708E-5E3C-4F5D-86D8-DEEEF83487BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FD5708E-5E3C-4F5D-86D8-DEEEF83487BC}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = FluentLayout.Android\FluentLayout.Android.csproj
+	EndGlobalSection
+EndGlobal
