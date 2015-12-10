@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>kiwi.Layout</id>
+        <version>0.8.5</version>
+        <authors>Daniel Münch</authors>
+        <licenseUrl>https://github.com/dmunch/kiwi.Layout/blob/master/COPYING.txt</licenseUrl>
+        <projectUrl>https://github.com/dmunch/kiwi.Layout</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Cross plattform linear constrained layouts. </description>
+        <summary>
+		Kiwi is an efficient C++ implementation of the Cassowary constraint solving algorithm. Kiwi is an implementation of the algorithm based on the seminal Cassowary paper. It is not a refactoring of the original C++ solver. Kiwi has been designed from the ground up to be lightweight and fast. Kiwi ranges from 10x to 500x faster than the original Cassowary solver with typical use cases gaining a 40x improvement. Memory savings are consistently > 5x. 
+	 </summary>
+        <tags>kiwi linear constraints cassowary autolayout android</tags>
+        <dependencies> 
+          <group>
+	    <dependency id="kiwi.net" version="1.0.0" />
+           </group>
+        </dependencies> 
+    </metadata> 
+
+    <files>
+        <file src="kiwi.Layout.Droid/bin/Debug/kiwi.Layout.Droid.dll" target="lib/monoandroid"/>
+        <file src="kiwi.Layout.iOS/bin/iPhone/Debug/kiwi.Layout.iOS.dll" target="lib/xamarinios"/>
+	
+	<file src="kiwi.Layout/bin/Debug/kiwi.Layout.dll" target="lib/portable-net45+win+wp80+MonoAndroid10+MonoTouch10"/>
+	<file src="kiwi.Layout/bin/Debug/kiwi.Layout.dll" target="lib/xamarinios"/>
+	<file src="kiwi.Layout/bin/Debug/kiwi.Layout.dll" target="lib/monoandroid"/>
+
+	<file src="kiwi.Layout.Fluent/bin/Debug/kiwi.Layout.Fluent.dll" target="lib/portable-net45+win+wp80+MonoAndroid10+MonoTouch10"/>
+	<file src="kiwi.Layout.Fluent/bin/Debug/kiwi.Layout.Fluent.dll" target="lib/xamarinios"/>
+	<file src="kiwi.Layout.Fluent/bin/Debug/kiwi.Layout.Fluent.dll" target="lib/monoandroid"/>
+    </files>
+</package>
